@@ -1,9 +1,9 @@
-import ball
-import my_event
+from ball import Ball
+from my_event import Event
+from paddle import Paddle
 import turtle
 import random
 import heapq
-import paddle
 
 class BouncingSimulator:
     def __init__(self, num_balls):
@@ -27,10 +27,10 @@ class BouncingSimulator:
             vx = 10*random.uniform(-1.0, 1.0)
             vy = 10*random.uniform(-1.0, 1.0)
             ball_color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
-            self.ball_list.append(ball.Ball(ball_radius, x, y, vx, vy, ball_color, i))
+            self.ball_list.append(Ball(ball_radius, x, y, vx, vy, ball_color, i))
 
         tom = turtle.Turtle()
-        self.my_paddle = paddle.Paddle(200, 50, (255, 0, 0), tom)
+        self.my_paddle = Paddle(200, 50, (255, 0, 0), tom)
         self.my_paddle.set_location([0, -50])
 
         self.screen = turtle.Screen()
@@ -44,13 +44,13 @@ class BouncingSimulator:
         for i in range(len(self.ball_list)):
             dt = a_ball.time_to_hit(self.ball_list[i])
             # insert this event into pq
-            heapq.heappush(self.pq, my_event.Event(self.t + dt, a_ball, self.ball_list[i], None))
+            heapq.heappush(self.pq, Event(self.t + dt, a_ball, self.ball_list[i], None))
         
         # particle-wall collisions
         dtX = a_ball.time_to_hit_vertical_wall()
         dtY = a_ball.time_to_hit_horizontal_wall()
-        heapq.heappush(self.pq, my_event.Event(self.t + dtX, a_ball, None, None))
-        heapq.heappush(self.pq, my_event.Event(self.t + dtY, None, a_ball, None))
+        heapq.heappush(self.pq, Event(self.t + dtX, a_ball, None, None))
+        heapq.heappush(self.pq, Event(self.t + dtY, None, a_ball, None))
     
     def __draw_border(self):
         turtle.penup()
@@ -72,13 +72,13 @@ class BouncingSimulator:
         for i in range(len(self.ball_list)):
             self.ball_list[i].draw()
         turtle.update()
-        heapq.heappush(self.pq, my_event.Event(self.t + 1.0/self.HZ, None, None, None))
+        heapq.heappush(self.pq, Event(self.t + 1.0/self.HZ, None, None, None))
 
     def __paddle_predict(self):
         for i in range(len(self.ball_list)):
             a_ball = self.ball_list[i]
             dtP = a_ball.time_to_hit_paddle(self.my_paddle)
-            heapq.heappush(self.pq, my_event.Event(self.t + dtP, a_ball, None, self.my_paddle))
+            heapq.heappush(self.pq, Event(self.t + dtP, a_ball, None, self.my_paddle))
 
     # move_left and move_right handlers update paddle positions
     def move_left(self):
@@ -94,7 +94,7 @@ class BouncingSimulator:
         # initialize pq with collision events and redraw event
         for i in range(len(self.ball_list)):
             self.__predict(self.ball_list[i])
-        heapq.heappush(self.pq, my_event.Event(0, None, None, None))
+        heapq.heappush(self.pq, Event(0, None, None, None))
 
         # listen to keyboard events and activate move_left and move_right handlers accordingly
         self.screen.listen()

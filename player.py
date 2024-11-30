@@ -9,7 +9,7 @@ class Player(Paddle):
         self.__initailize_input_set()
 
         self.tilt_degree = 40
-        self.move_step = 100
+        self.move_per_step = 100
 
     def __initailize_input_set(self):
         if self.id == 1:
@@ -31,10 +31,13 @@ class Player(Paddle):
         screen.onkey(self.tilt_ccw, self.input_set["tilt_ccw"])
     
     def move_up(self):
-        pass
+        self.set_location([self.x, self.y + self.move_per_step])
+
     def move_down(self):
-        pass
+        self.set_location([self.x, self.y - self.move_per_step])
+
     def tilt_cw(self):
-        pass
+        self.degree = -self.tilt_degree
+
     def tilt_ccw(self):
-        pass
+        self.degree = self.tilt_degree

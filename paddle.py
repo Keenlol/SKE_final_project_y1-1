@@ -4,6 +4,7 @@ class Paddle:
         self.height = height
         self.x = 0
         self.y = 0
+        self.degree = 0
         self.color = color
         self.my_turtle = my_turtle
         self.my_turtle.penup()
@@ -18,6 +19,7 @@ class Paddle:
     def draw(self):
         self.my_turtle.color(self.color)
         self.my_turtle.goto(self.x, self.y - self.height/2)
+        self.my_turtle.setheading(self.degree)
         self.my_turtle.forward(self.width/2)
         self.my_turtle.pendown()
         self.my_turtle.begin_fill()

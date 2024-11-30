@@ -82,13 +82,13 @@ class BouncingSimulator:
 
     # move_left and move_right handlers update paddle positions
     def move_left(self):
-        if (self.my_paddle.location[0] - self.my_paddle.width/2 - 40) >= -self.canvas_width:
-            self.my_paddle.set_location([self.my_paddle.location[0] - 40, self.my_paddle.location[1]])
+        if (self.my_paddle.x - self.my_paddle.width/2 - 40) >= -self.canvas_width:
+            self.my_paddle.set_location([self.my_paddle.x - 40, self.my_paddle.y])
 
     # move_left and move_right handlers update paddle positions
     def move_right(self):
-        if (self.my_paddle.location[0] + self.my_paddle.width/2 + 40) <= self.canvas_width:
-            self.my_paddle.set_location([self.my_paddle.location[0] + 40, self.my_paddle.location[1]])
+        if (self.my_paddle.x + self.my_paddle.width/2 + 40) <= self.canvas_width:
+            self.my_paddle.set_location([self.my_paddle.x + 40, self.my_paddle.y])
 
     def run(self):
         # initialize pq with collision events and redraw event

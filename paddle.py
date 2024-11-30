@@ -2,7 +2,8 @@ class Paddle:
     def __init__(self, width, height, color, my_turtle):
         self.width = width
         self.height = height
-        self.location = [0, 0]
+        self.x = 0
+        self.y = 0
         self.color = color
         self.my_turtle = my_turtle
         self.my_turtle.penup()
@@ -10,12 +11,13 @@ class Paddle:
         self.my_turtle.hideturtle()
 
     def set_location(self, location):
-        self.location = location
-        self.my_turtle.goto(self.location[0], self.location[1])
+        self.x = location[0]
+        self.y = location[1]
+        self.my_turtle.goto(self.x, self.y)
 
     def draw(self):
         self.my_turtle.color(self.color)
-        self.my_turtle.goto(self.location[0], self.location[1] - self.height/2)
+        self.my_turtle.goto(self.x, self.y - self.height/2)
         self.my_turtle.forward(self.width/2)
         self.my_turtle.pendown()
         self.my_turtle.begin_fill()
@@ -26,7 +28,7 @@ class Paddle:
             self.my_turtle.forward(self.width)
         self.my_turtle.end_fill()
         self.my_turtle.penup()
-        self.my_turtle.goto(self.location[0], self.location[1])
+        self.my_turtle.goto(self.x, self.y)
 
     def clear(self):
         self.my_turtle.clear()

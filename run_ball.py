@@ -29,8 +29,7 @@ class BouncingSimulator:
             ball_color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
             self.ball_list.append(Ball(ball_radius, x, y, vx, vy, ball_color, i))
 
-        tom = turtle.Turtle()
-        self.my_paddle = Paddle(200, 50, (255, 0, 0), tom)
+        self.my_paddle = Paddle(200, 50, (255, 0, 0))
         self.my_paddle.set_location([0, -50])
 
         self.screen = turtle.Screen()
@@ -63,6 +62,7 @@ class BouncingSimulator:
             turtle.left(90)
             turtle.forward(2*self.canvas_height)
             turtle.left(90)
+        turtle.penup()
 
     def __redraw(self):
         turtle.clear()

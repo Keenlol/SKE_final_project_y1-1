@@ -1,11 +1,12 @@
 from paddle import Paddle
 
 class Player(Paddle):
-    def __init__(self, id, color, width, height, pos):
+    def __init__(self, id, color, width, height, pos, canvas_height):
         super().__init__(width, height, color)
         self.id = id
         self.score = 0
         self.input_set = {}
+        self.canvas_height = canvas_height
         self.__initailize_input_set()
 
         self.x = pos[0]
@@ -37,10 +38,12 @@ class Player(Paddle):
         
     
     def move_up(self):
-        self.set_location([self.x, self.y + self.move_per_step])
+        if self.y < self.canvas_height/2:
+            self.set_location([self.x, self.y + self.move_per_step])
 
     def move_down(self):
-        self.set_location([self.x, self.y - self.move_per_step])
+        if self.y > -self.canvas_height/2:
+            self.set_location([self.x, self.y - self.move_per_step])
 
     def tilt_cw(self):
         self.degree = -self.tilt_degree

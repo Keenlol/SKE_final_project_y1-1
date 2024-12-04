@@ -17,7 +17,7 @@ class BouncingSimulator:
         turtle.tracer(0)
         turtle.hideturtle()
         turtle.colormode(255)
-        self.canvas_width = turtle.screensize()[0]
+        self.canvas_width = turtle.screensize()[0] + 100
         self.canvas_height = turtle.screensize()[1]
         print(self.canvas_width, self.canvas_height)
 
@@ -33,8 +33,8 @@ class BouncingSimulator:
         # self.my_paddle = Paddle(200, 50, (255, 0, 0))
         # self.my_paddle.set_location([0, -50])
 
-        self.player1 = Player(id=1, color="red", width=10, height=150, pos=[-400, 0])
-        self.player2 = Player(id=2, color="blue", width=10, height=150, pos=[400, 0])
+        self.player1 = Player(id=1, color="red", width=10, height=150, pos=[-400, 0], canvas_height=self.canvas_height)
+        self.player2 = Player(id=2, color="blue", width=10, height=150, pos=[400, 0], canvas_height=self.canvas_height)
         self.screen = turtle.Screen()
 
     # updates priority queue with all new events for a_ball
@@ -60,7 +60,7 @@ class BouncingSimulator:
         turtle.pensize(10)
         turtle.setheading(0)
         turtle.pendown()
-        turtle.color((0, 0, 0))   
+        turtle.color((0, 0, 0))
         for i in range(2):
             turtle.forward(2*self.canvas_width)
             turtle.left(90)
@@ -145,6 +145,6 @@ class BouncingSimulator:
         turtle.done()
 
 # num_balls = int(input("Number of balls to simulate: "))
-num_balls = 10
+num_balls = 2
 my_simulator = BouncingSimulator(num_balls)
 my_simulator.run()

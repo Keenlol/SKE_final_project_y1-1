@@ -1,15 +1,17 @@
 from paddle import Paddle
 
 class Player(Paddle):
-    def __init__(self, id, color, my_turtle, width, height):
-        super().__init__(width, height, color, my_turtle)
+    def __init__(self, id, color, width, height, pos):
+        super().__init__(width, height, color)
         self.id = id
         self.score = 0
         self.input_set = {}
         self.__initailize_input_set()
 
-        self.tilt_degree = 40
-        self.move_per_step = 100
+        self.x = pos[0]
+        self.y = pos[1]
+        self.tilt_degree = 45
+        self.move_per_step = self.height*0.8
 
     def __initailize_input_set(self):
         if self.id == 1:
@@ -25,10 +27,14 @@ class Player(Paddle):
 
     def get_input(self, screen):
         screen.listen()
-        screen.onkey(self.move_up, self.input_set["move_up"])
-        screen.onkey(self.move_down, self.input_set["move_down"])
-        screen.onkey(self.tilt_cw, self.input_set["tilt_cw"])
-        screen.onkey(self.tilt_ccw, self.input_set["tilt_ccw"])
+        screen.onkeypress(self.move_up, self.input_set["move_up"])
+        screen.onkeypress(self.move_down, self.input_set["move_down"])
+        screen.onkeypress(self.tilt_cw, self.input_set["tilt_cw"])
+        screen.onkeypress(self.tilt_ccw, self.input_set["tilt_ccw"])
+
+        screen.onkeyrelease(self.tilt_reset, self.input_set["tilt_cw"])
+        screen.onkeyrelease(self.tilt_reset, self.input_set["tilt_ccw"])
+        
     
     def move_up(self):
         self.set_location([self.x, self.y + self.move_per_step])
@@ -41,3 +47,6 @@ class Player(Paddle):
 
     def tilt_ccw(self):
         self.degree = self.tilt_degree
+    
+    def tilt_reset(self):
+        self.degree = 0

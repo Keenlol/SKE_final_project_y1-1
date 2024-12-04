@@ -22,6 +22,7 @@ class Ball:
         turtle.color(self.color)
         turtle.fillcolor(self.color)
         turtle.goto(self.x, self.y-self.size)
+        turtle.setheading(0)
         turtle.pendown()
         turtle.begin_fill()
         turtle.circle(self.size)

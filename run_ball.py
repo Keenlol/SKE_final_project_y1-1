@@ -1,6 +1,7 @@
 from ball import Ball
 from my_event import Event
 from paddle import Paddle
+from player import Player
 import turtle
 import random
 import heapq
@@ -29,9 +30,11 @@ class BouncingSimulator:
             ball_color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
             self.ball_list.append(Ball(ball_radius, x, y, vx, vy, ball_color, i))
 
-        self.my_paddle = Paddle(200, 50, (255, 0, 0))
-        self.my_paddle.set_location([0, -50])
+        # self.my_paddle = Paddle(200, 50, (255, 0, 0))
+        # self.my_paddle.set_location([0, -50])
 
+        self.player1 = Player(id=1, color="red", width=10, height=150, pos=[-400, 0])
+        self.player2 = Player(id=2, color="blue", width=10, height=150, pos=[400, 0])
         self.screen = turtle.Screen()
 
     # updates priority queue with all new events for a_ball
@@ -55,6 +58,7 @@ class BouncingSimulator:
         turtle.penup()
         turtle.goto(-self.canvas_width, -self.canvas_height)
         turtle.pensize(10)
+        turtle.setheading(0)
         turtle.pendown()
         turtle.color((0, 0, 0))   
         for i in range(2):
@@ -66,9 +70,11 @@ class BouncingSimulator:
 
     def __redraw(self):
         turtle.clear()
-        self.my_paddle.clear()
+        self.player1.clear()
+        self.player2.clear()
         self.__draw_border()
-        self.my_paddle.draw()
+        self.player1.draw()
+        self.player2.draw()
         for i in range(len(self.ball_list)):
             self.ball_list[i].draw()
         turtle.update()
@@ -77,18 +83,18 @@ class BouncingSimulator:
     def __paddle_predict(self):
         for i in range(len(self.ball_list)):
             a_ball = self.ball_list[i]
-            dtP = a_ball.time_to_hit_paddle(self.my_paddle)
-            heapq.heappush(self.pq, Event(self.t + dtP, a_ball, None, self.my_paddle))
+            dtP = a_ball.time_to_hit_paddle(self.player1)
+            heapq.heappush(self.pq, Event(self.t + dtP, a_ball, None, self.player1))
 
     # move_left and move_right handlers update paddle positions
-    def move_left(self):
-        if (self.my_paddle.x - self.my_paddle.width/2 - 40) >= -self.canvas_width:
-            self.my_paddle.set_location([self.my_paddle.x - 40, self.my_paddle.y])
+    # def move_left(self):
+    #     if (self.my_paddle.x - self.my_paddle.width/2 - 40) >= -self.canvas_width:
+    #         self.my_paddle.set_location([self.my_paddle.x - 40, self.my_paddle.y])
 
-    # move_left and move_right handlers update paddle positions
-    def move_right(self):
-        if (self.my_paddle.x + self.my_paddle.width/2 + 40) <= self.canvas_width:
-            self.my_paddle.set_location([self.my_paddle.x + 40, self.my_paddle.y])
+    # # move_left and move_right handlers update paddle positions
+    # def move_right(self):
+    #     if (self.my_paddle.x + self.my_paddle.width/2 + 40) <= self.canvas_width:
+    #         self.my_paddle.set_location([self.my_paddle.x + 40, self.my_paddle.y])
 
     def run(self):
         # initialize pq with collision events and redraw event
@@ -97,9 +103,11 @@ class BouncingSimulator:
         heapq.heappush(self.pq, Event(0, None, None, None))
 
         # listen to keyboard events and activate move_left and move_right handlers accordingly
-        self.screen.listen()
-        self.screen.onkey(self.move_left, "Left")
-        self.screen.onkey(self.move_right, "Right")
+        self.player1.get_input(self.screen)
+        self.player2.get_input(self.screen)
+        # self.screen.listen()
+        # self.screen.onkey(self.move_left, "Left")
+        # self.screen.onkey(self.move_right, "Right")
 
         while (True):
             e = heapq.heappop(self.pq)

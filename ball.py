@@ -2,7 +2,7 @@ import turtle
 import math
 
 class Ball:
-    def __init__(self, size, x, y, vx, vy, color, id):
+    def __init__(self, size, x, y, vx, vy, color, id, canvas_width, canvas_height):
         self.size = size
         self.x = x
         self.y = y
@@ -12,8 +12,8 @@ class Ball:
         self.mass = 100*size**2
         self.count = 0
         self.id = id
-        self.canvas_width = turtle.screensize()[0]
-        self.canvas_height = turtle.screensize()[1]
+        self.canvas_width = canvas_width
+        self.canvas_height = canvas_height
         
 
     def draw(self):
@@ -123,12 +123,22 @@ class Ball:
             return math.inf
         if (self.vy < 0) and ((self.y - self.size) < (paddle.y + paddle.height/2)):
             return math.inf
+        if (self.vx > 0) and ((self.x + self.size) > (paddle.x - paddle.width/2)):
+            return math.inf
+        if (self.vx < 0) and ((self.x - self.size) < (paddle.x + paddle.width/2)):
+            return math.inf
 
-        dt = (math.sqrt((paddle.y - self.y)**2) - self.size - paddle.height/2) / abs(self.vy)
+        dty = (abs(paddle.y - self.y) - self.size - paddle.height/2) / abs(self.vy)
+        dtx = (abs(paddle.x - self.x) - self.size - paddle.width/2) / abs(self.vx)
         paddle_left_edge = paddle.x - paddle.width/2
         paddle_right_edge = paddle.x + paddle.width/2
-        if paddle_left_edge - self.size <= self.x + (self.vx*dt) <= paddle_right_edge + self.size:
-            return dt
+        paddle_bottom_edge = paddle.y - paddle.height/2
+        paddle_top_edge = paddle.y + paddle.height/2
+
+        if paddle_left_edge - self.size <= self.x + (self.vx*dty) <= paddle_right_edge + self.size:
+            return dty
+        elif paddle_bottom_edge - self.size <= self.y + (self.vy*dtx) <= paddle_top_edge + self.size:
+            return dtx
         else:
             return math.inf
 

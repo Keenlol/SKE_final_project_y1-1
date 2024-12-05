@@ -28,13 +28,13 @@ class BouncingSimulator:
             vx = 10*random.uniform(-1.0, 1.0)
             vy = 10*random.uniform(-1.0, 1.0)
             ball_color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
-            self.ball_list.append(Ball(ball_radius, x, y, vx, vy, ball_color, i))
+            self.ball_list.append(Ball(ball_radius, x, y, vx, vy, ball_color, i, self.canvas_width, self.canvas_height))
 
         # self.my_paddle = Paddle(200, 50, (255, 0, 0))
         # self.my_paddle.set_location([0, -50])
 
-        self.player1 = Player(id=1, color="red", width=10, height=150, pos=[-400, 0], canvas_height=self.canvas_height)
-        self.player2 = Player(id=2, color="blue", width=10, height=150, pos=[400, 0], canvas_height=self.canvas_height)
+        self.player1 = Player(id=1, color="red", width=10, height=150, pos=[-400, 0], canvas_info=[self.canvas_width, self.canvas_height])
+        self.player2 = Player(id=2, color="blue", width=10, height=150, pos=[400, 0], canvas_info=[self.canvas_width, self.canvas_height])
         self.screen = turtle.Screen()
 
     # updates priority queue with all new events for a_ball

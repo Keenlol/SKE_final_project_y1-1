@@ -1,12 +1,13 @@
 from paddle import Paddle
 
 class Player(Paddle):
-    def __init__(self, id, color, width, height, pos, canvas_height):
+    def __init__(self, id, color, width, height, pos, canvas_info):
         super().__init__(width, height, color)
         self.id = id
         self.score = 0
         self.input_set = {}
-        self.canvas_height = canvas_height
+        self.canvas_width = canvas_info[0]
+        self.canvas_height = canvas_info[1]
         self.__initailize_input_set()
 
         self.x = pos[0]

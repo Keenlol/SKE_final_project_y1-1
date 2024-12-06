@@ -10,6 +10,7 @@ class BouncingSimulator:
     def __init__(self, num_balls):
         self.num_balls = num_balls
         self.ball_list = []
+        self.player_list = []
         self.t = 0.0
         self.pq = []
         self.HZ = 4
@@ -33,8 +34,9 @@ class BouncingSimulator:
         # self.my_paddle = Paddle(200, 50, (255, 0, 0))
         # self.my_paddle.set_location([0, -50])
 
-        self.player1 = Player(id=1, color="red", width=10, height=150, pos=[-400, 0], canvas_info=[self.canvas_width, self.canvas_height])
-        self.player2 = Player(id=2, color="blue", width=10, height=150, pos=[400, 0], canvas_info=[self.canvas_width, self.canvas_height])
+        player1 = Player(id=1, color="red", width=10, height=150, pos=[-400, 0], canvas_info=[self.canvas_width, self.canvas_height])
+        player2 = Player(id=2, color="blue", width=10, height=150, pos=[400, 0], canvas_info=[self.canvas_width, self.canvas_height])
+        self.player_list = [player1, player2]
         self.screen = turtle.Screen()
 
     # updates priority queue with all new events for a_ball
@@ -70,21 +72,21 @@ class BouncingSimulator:
 
     def __redraw(self):
         turtle.clear()
-        self.player1.clear()
-        self.player2.clear()
+        for a_player in self.player_list:
+            a_player.clear()
         self.__draw_border()
-        self.player1.draw()
-        self.player2.draw()
-        for i in range(len(self.ball_list)):
-            self.ball_list[i].draw()
+        for a_player in self.player_list:
+            a_player.draw()
+        for a_ball in self.ball_list:
+            a_ball.draw()
         turtle.update()
         heapq.heappush(self.pq, Event(self.t + 1.0/self.HZ, None, None, None))
 
     def __paddle_predict(self):
-        for i in range(len(self.ball_list)):
-            a_ball = self.ball_list[i]
-            dtP = a_ball.time_to_hit_paddle(self.player1)
-            heapq.heappush(self.pq, Event(self.t + dtP, a_ball, None, self.player1))
+        for a_ball in self.ball_list:
+            for a_player in self.player_list:
+                dtP = a_ball.time_to_hit_paddle(a_player)
+                heapq.heappush(self.pq, Event(self.t + dtP, a_ball, None, a_player))
 
     # move_left and move_right handlers update paddle positions
     # def move_left(self):
@@ -103,8 +105,8 @@ class BouncingSimulator:
         heapq.heappush(self.pq, Event(0, None, None, None))
 
         # listen to keyboard events and activate move_left and move_right handlers accordingly
-        self.player1.get_input(self.screen)
-        self.player2.get_input(self.screen)
+        for a_player in self.player_list:
+            a_player.get_input(self.screen)
         # self.screen.listen()
         # self.screen.onkey(self.move_left, "Left")
         # self.screen.onkey(self.move_right, "Right")

@@ -23,3 +23,6 @@ class Event:
         if (self.b is not None) and (self.b.count != self.count_b):
             return False
         return True
+    
+    def __str__(self) -> str:
+        return f"time={self.time} | {self.a} | {self.b} | {self.paddle} |"

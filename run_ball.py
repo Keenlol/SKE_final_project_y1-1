@@ -1,6 +1,5 @@
 from ball import Ball
 from my_event import Event
-from paddle import Paddle
 from player import Player
 import turtle
 import random
@@ -34,8 +33,8 @@ class BouncingSimulator:
         # self.my_paddle = Paddle(200, 50, (255, 0, 0))
         # self.my_paddle.set_location([0, -50])
 
-        player1 = Player(id=1, color="red", width=10, height=150, pos=[-400, 0], canvas_info=[self.canvas_width, self.canvas_height])
-        player2 = Player(id=2, color="blue", width=10, height=150, pos=[400, 0], canvas_info=[self.canvas_width, self.canvas_height])
+        player1 = Player(id=1, color="red", width=100, height=150, pos=[-400, 0], canvas_info=[self.canvas_width, self.canvas_height])
+        player2 = Player(id=2, color="blue", width=100, height=150, pos=[400, 0], canvas_info=[self.canvas_width, self.canvas_height])
         self.player_list = [player1, player2]
         self.screen = turtle.Screen()
 
@@ -83,20 +82,12 @@ class BouncingSimulator:
         heapq.heappush(self.pq, Event(self.t + 1.0/self.HZ, None, None, None))
 
     def __paddle_predict(self):
-        for a_ball in self.ball_list:
-            for a_player in self.player_list:
-                dtP = a_ball.time_to_hit_paddle(a_player)
-                heapq.heappush(self.pq, Event(self.t + dtP, a_ball, None, a_player))
-
-    # move_left and move_right handlers update paddle positions
-    # def move_left(self):
-    #     if (self.my_paddle.x - self.my_paddle.width/2 - 40) >= -self.canvas_width:
-    #         self.my_paddle.set_location([self.my_paddle.x - 40, self.my_paddle.y])
-
-    # # move_left and move_right handlers update paddle positions
-    # def move_right(self):
-    #     if (self.my_paddle.x + self.my_paddle.width/2 + 40) <= self.canvas_width:
-    #         self.my_paddle.set_location([self.my_paddle.x + 40, self.my_paddle.y])
+        for a_player in self.player_list:
+            for a_ball in self.ball_list:
+                dtPX = a_ball.time_to_hit_paddle_vertical(a_player)
+                dtPY = a_ball.time_to_hit_paddle_horizontal(a_player)
+                heapq.heappush(self.pq, Event(self.t + dtPX, a_ball, None, a_player))
+                heapq.heappush(self.pq, Event(self.t + dtPY, a_ball, None, a_player))
 
     def run(self):
         # initialize pq with collision events and redraw event
@@ -107,23 +98,21 @@ class BouncingSimulator:
         # listen to keyboard events and activate move_left and move_right handlers accordingly
         for a_player in self.player_list:
             a_player.get_input(self.screen)
-        # self.screen.listen()
-        # self.screen.onkey(self.move_left, "Left")
-        # self.screen.onkey(self.move_right, "Right")
 
         while (True):
-            e = heapq.heappop(self.pq)
-            if not e.is_valid():
+            current_event = heapq.heappop(self.pq)
+            if not current_event.is_valid():
                 continue
+            print(current_event)
 
-            ball_a = e.a
-            ball_b = e.b
-            paddle_a = e.paddle
+            ball_a = current_event.a
+            ball_b = current_event.b
+            paddle_a = current_event.paddle
 
             # update positions, and then simulation clock
             for i in range(len(self.ball_list)):
-                self.ball_list[i].move(e.time - self.t)
-            self.t = e.time
+                self.ball_list[i].move(current_event.time - self.t)
+            self.t = current_event.time
 
             if (ball_a is not None) and (ball_b is not None) and (paddle_a is None):
                 ball_a.bounce_off(ball_b)
@@ -134,7 +123,9 @@ class BouncingSimulator:
             elif (ball_a is None) and (ball_b is None) and (paddle_a is None):
                 self.__redraw()
             elif (ball_a is not None) and (ball_b is None) and (paddle_a is not None):
-                ball_a.bounce_off_paddle()
+                ball_a.bounce_off_paddle(paddle_a)
+            elif (ball_a is not None) and (ball_b is None) and (paddle_a is not None):
+                ball_a.bounce_off_paddle(paddle_a)
 
             self.__predict(ball_a)
             self.__predict(ball_b)

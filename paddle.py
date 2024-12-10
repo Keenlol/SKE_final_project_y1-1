@@ -40,4 +40,4 @@ class Paddle:
         turtle.clear()
 
     def __str__(self):
-        return "paddle"
+        return f"paddle ({self.x:.2f}, {self.y:.2f}) a: {self.degree}*"

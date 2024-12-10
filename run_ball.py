@@ -34,8 +34,8 @@ class BouncingSimulator:
         # self.my_paddle = Paddle(200, 50, (255, 0, 0))
         # self.my_paddle.set_location([0, -50])
 
-        player1 = Player(id=1, color="red", width=10, height=400, pos=[-400, 0], canvas_info=[self.canvas_width, self.canvas_height])
-        player2 = Player(id=2, color="blue", width=10, height=400, pos=[400, 0], canvas_info=[self.canvas_width, self.canvas_height])
+        player1 = Player(id=1, color="red", width=10, height=150, pos=[-400, 0], canvas_info=[self.canvas_width, self.canvas_height])
+        player2 = Player(id=2, color="blue", width=10, height=150, pos=[400, 0], canvas_info=[self.canvas_width, self.canvas_height])
         self.player_list = [player1, player2]
         self.screen = turtle.Screen()
 
@@ -56,17 +56,25 @@ class BouncingSimulator:
         heapq.heappush(self.pq, Event(self.t + dtX, a_ball, None, None))
         heapq.heappush(self.pq, Event(self.t + dtY, None, a_ball, None))
     
-    def __draw_border(self):
+    def __draw_border(self, line_thickness ,color_normal, color_left, color_right, n_interval):
         turtle.penup()
         turtle.goto(-self.canvas_width, -self.canvas_height)
-        turtle.pensize(10)
+        turtle.pensize(line_thickness)
         turtle.setheading(0)
-        turtle.pendown()
-        turtle.color((0, 0, 0))
-        for i in range(2):
+
+        for color_i in [color_left, color_right]:
+            turtle.pendown()
+            turtle.color(color_normal)
             turtle.forward(2*self.canvas_width)
             turtle.left(90)
-            turtle.forward(2*self.canvas_height)
+            turtle.color(color_i)
+            for i in range(1, n_interval+1):
+                if i % 2 == 1:
+                    turtle.pendown()
+                    turtle.forward(2*self.canvas_height/n_interval)
+                    turtle.penup()
+                else:
+                    turtle.forward(2*self.canvas_height/n_interval)
             turtle.left(90)
         turtle.penup()
 
@@ -74,7 +82,14 @@ class BouncingSimulator:
         turtle.clear()
         for a_player in self.player_list:
             a_player.clear()
-        self.__draw_border()
+
+        self.__draw_border(line_thickness=10, 
+                           color_normal="black", 
+                           color_left=(150, 150, 255), 
+                           color_right=(255, 150, 150),
+                           n_interval=15)
+                        
+
         for a_player in self.player_list:
             a_player.draw()
         for a_ball in self.ball_list:

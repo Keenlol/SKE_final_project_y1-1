@@ -6,9 +6,11 @@ class Digit:
         self.y = pos[1]
         self.color = color
         self.thickness = thickness
+        self.width = width
+        self.height = height
 
-        dx = width/2
-        dy = height/2
+        dx = self.width/2
+        dy = self.height/2
 
         self.grid_points = [[self.x-dx, self.y+dy], [self.x, self.y+dy], [self.x+dx, self.y+dy],
                             [self.x-dx, self.y], [self.x, self.y], [self.x+dx, self.y],

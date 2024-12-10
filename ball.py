@@ -130,7 +130,6 @@ class Ball:
             return final_x, final_y
 
     def time_to_hit_paddle_horizontal(self, paddle):
-
         magic_x, magic_y = self.__rotate_xy_around_pivot(self.x, self.y, paddle.x, paddle.y, -paddle.degree)
         magic_vx, magic_vy = self.__rotate_xy_around_pivot(self.vx, self.vy, 0, 0, -paddle.degree)
 
@@ -150,7 +149,6 @@ class Ball:
             return math.inf
 
     def time_to_hit_paddle_vertical(self, paddle):
-
         magic_x, magic_y = self.__rotate_xy_around_pivot(self.x, self.y, paddle.x, paddle.y, -paddle.degree)
         magic_vx, magic_vy = self.__rotate_xy_around_pivot(self.vx, self.vy, 0, 0, -paddle.degree)
 
@@ -170,16 +168,15 @@ class Ball:
             return math.inf
 
     def bounce_off_paddle(self, paddle):
-        # Convert ball and paddle positions to paddle's coordinate system
         magic_x, magic_y = self.__rotate_xy_around_pivot(self.x, self.y, paddle.x, paddle.y, -paddle.degree)
         magic_vx, magic_vy = self.__rotate_xy_around_pivot(self.vx, self.vy, 0, 0, -paddle.degree)
         
-        # Reflect the velocity based on which side of the paddle was hit
-        if abs(magic_x - paddle.x) > abs(magic_y - paddle.y):
-            # Hit on left/right side - reverse x velocity
+        dx = abs(magic_x - paddle.x) - self.size - paddle.width/2
+        dy = abs(magic_y - paddle.y) - self.size - paddle.height/2
+
+        if dx > dy:
             magic_vx = -magic_vx
         else:
-            # Hit on top/bottom - reverse y velocity
             magic_vy = -magic_vy
         
         # Convert velocity back to world coordinates

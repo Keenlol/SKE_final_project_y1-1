@@ -4,6 +4,7 @@ from player import Player
 import turtle
 import random
 import heapq
+import sys
 
 class BouncingSimulator:
     def __init__(self, num_balls):
@@ -33,8 +34,8 @@ class BouncingSimulator:
         # self.my_paddle = Paddle(200, 50, (255, 0, 0))
         # self.my_paddle.set_location([0, -50])
 
-        player1 = Player(id=1, color="red", width=100, height=150, pos=[-400, 0], canvas_info=[self.canvas_width, self.canvas_height])
-        player2 = Player(id=2, color="blue", width=100, height=150, pos=[400, 0], canvas_info=[self.canvas_width, self.canvas_height])
+        player1 = Player(id=1, color="red", width=10, height=400, pos=[-400, 0], canvas_info=[self.canvas_width, self.canvas_height])
+        player2 = Player(id=2, color="blue", width=10, height=400, pos=[400, 0], canvas_info=[self.canvas_width, self.canvas_height])
         self.player_list = [player1, player2]
         self.screen = turtle.Screen()
 
@@ -122,8 +123,6 @@ class BouncingSimulator:
                 ball_b.bounce_off_horizontal_wall()
             elif (ball_a is None) and (ball_b is None) and (paddle_a is None):
                 self.__redraw()
-            elif (ball_a is not None) and (ball_b is None) and (paddle_a is not None):
-                ball_a.bounce_off_paddle(paddle_a)
             elif (ball_a is not None) and (ball_b is None) and (paddle_a is not None):
                 ball_a.bounce_off_paddle(paddle_a)
 

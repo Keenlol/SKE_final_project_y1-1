@@ -22,7 +22,7 @@ class BouncingSimulator:
         self.canvas_height = turtle.screensize()[1]
         print(self.canvas_width, self.canvas_height)
 
-        ball_radius = 0.05 * self.canvas_width
+        ball_radius = 30
         for i in range(self.num_balls):
             x = -self.canvas_width + (i+1)*(2*self.canvas_width/(self.num_balls+1))
             y = 0.0
@@ -39,8 +39,8 @@ class BouncingSimulator:
         self.player_list = [player1, player2]
 
         thickness = 20
-        digit_size = [30,80]
-        spacing = 20
+        digit_size = [30,70]
+        spacing = 30
         ui_score1 = Number(pos=[-600,0], digit_size=digit_size, color=("red"), thickness=thickness, spacing=spacing)
         ui_score2 = Number(pos=[600,0], digit_size=digit_size, color=("blue"), thickness=thickness, spacing=spacing)
         self.ui_score_list = [ui_score1, ui_score2]
@@ -55,13 +55,13 @@ class BouncingSimulator:
         for i in range(len(self.ball_list)):
             dt = a_ball.time_to_hit(self.ball_list[i])
             # insert this event into pq
-            heapq.heappush(self.pq, Event(self.t + dt, a_ball, self.ball_list[i], None))
+            heapq.heappush(self.pq, Event(self.t + dt, a_ball, self.ball_list[i], None, None))
         
         # particle-wall collisions
-        # dtX = a_ball.time_to_hit_vertical_wall()
+        dtX = a_ball.time_to_leave_border()
         dtY = a_ball.time_to_hit_horizontal_wall()
-        # heapq.heappush(self.pq, Event(self.t + dtX, a_ball, None, None))
-        heapq.heappush(self.pq, Event(self.t + dtY, None, a_ball, None))
+        heapq.heappush(self.pq, Event(self.t + dtX, a_ball, None, None, None))
+        heapq.heappush(self.pq, Event(self.t + dtY, None, a_ball, None, None))
     
     def __draw_border(self, line_thickness ,color_normal, color_left, color_right, n_interval):
         turtle.penup()
@@ -104,21 +104,21 @@ class BouncingSimulator:
             a_ball.draw()
 
         turtle.update()
-        heapq.heappush(self.pq, Event(self.t + 1.0/self.HZ, None, None, None))
+        heapq.heappush(self.pq, Event(self.t + 1.0/self.HZ, None, None, None, None))
 
     def __paddle_predict(self):
         for a_player in self.player_list:
             for a_ball in self.ball_list:
                 dtPX = a_ball.time_to_hit_paddle_vertical(a_player)
                 dtPY = a_ball.time_to_hit_paddle_horizontal(a_player)
-                heapq.heappush(self.pq, Event(self.t + dtPX, a_ball, None, a_player))
-                heapq.heappush(self.pq, Event(self.t + dtPY, a_ball, None, a_player))
+                heapq.heappush(self.pq, Event(self.t + dtPX, a_ball, None, a_player, [a_player.x, a_player.y]))
+                heapq.heappush(self.pq, Event(self.t + dtPY, a_ball, None, a_player, [a_player.x, a_player.y]))
 
     def run(self):
         # initialize pq with collision events and redraw event
         for i in range(len(self.ball_list)):
             self.__predict(self.ball_list[i])
-        heapq.heappush(self.pq, Event(0, None, None, None))
+        heapq.heappush(self.pq, Event(0, None, None, None, None))
 
         # listen to keyboard events and activate move_left and move_right handlers accordingly
         for a_player in self.player_list:
@@ -133,6 +133,7 @@ class BouncingSimulator:
             ball_a = current_event.a
             ball_b = current_event.b
             paddle_a = current_event.paddle
+            paddle_a_pos_snapshot = current_event.paddle_pos_snapshot
 
             # update positions, and then simulation clock
             for i in range(len(self.ball_list)):
@@ -141,30 +142,24 @@ class BouncingSimulator:
 
             if (ball_a is not None) and (ball_b is not None) and (paddle_a is None):
                 ball_a.bounce_off(ball_b)
-            # elif (ball_a is not None) and (ball_b is None) and (paddle_a is None):
-            #     ball_a.bounce_off_vertical_wall()
+            elif (ball_a is not None) and (ball_b is None) and (paddle_a is None):
+                if ball_a.x < 0:
+                    self.player_list[1].score += 1
+                if ball_a.x > 0:
+                    self.player_list[0].score += 1
+                ball_a.respawn()
             elif (ball_a is None) and (ball_b is not None) and (paddle_a is None):
                 ball_b.bounce_off_horizontal_wall()
             elif (ball_a is None) and (ball_b is None) and (paddle_a is None):
                 self.__redraw()
             elif (ball_a is not None) and (ball_b is None) and (paddle_a is not None):
-                ball_a.bounce_off_paddle(paddle_a)
+                ball_a.bounce_off_paddle(paddle_a, paddle_a_pos_snapshot)
 
             self.__predict(ball_a)
             self.__predict(ball_b)
 
             # regularly update the prediction for the paddle as its position may always be changing due to keyboard events
             self.__paddle_predict()
-
-            for i in range(len(self.ball_list)):
-                if self.ball_list[i].x > self.canvas_width:
-                    self.ball_list[i].respawn()
-                    self.player_list[1].score += 1
-                    continue
-                elif self.ball_list[i].x < -self.canvas_width:
-                    self.ball_list[i].respawn()
-                    self.player_list[0].score += 1
-                    continue
 
 
         # hold the window; close it by clicking the window close 'x' mark

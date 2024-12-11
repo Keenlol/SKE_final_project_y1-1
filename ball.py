@@ -20,6 +20,7 @@ class Ball:
     def draw(self):
         # draw a circle of radius equals to size centered at (x, y) and paint it with color
         turtle.penup()
+        turtle.pensize(0)
         turtle.color(self.color)
         turtle.fillcolor(self.color)
         turtle.goto(self.x, self.y-self.size)
@@ -103,7 +104,7 @@ class Ball:
 
         return t
 
-    def time_to_hit_vertical_wall(self):
+    def time_to_leave_border(self):
         if self.vx > 0:
             return (self.canvas_width - self.x - self.size) / self.vx
         elif self.vx < 0:
@@ -167,12 +168,15 @@ class Ball:
         else:
             return math.inf
 
-    def bounce_off_paddle(self, paddle):
-        magic_x, magic_y = self.__rotate_xy_around_pivot(self.x, self.y, paddle.x, paddle.y, -paddle.degree)
+    def bounce_off_paddle(self, paddle, paddle_pos_snapshot):
+
+        paddle_x = paddle_pos_snapshot[0]
+        paddle_y = paddle_pos_snapshot[1]
+
+        magic_x, magic_y = self.__rotate_xy_around_pivot(self.x, self.y, paddle_x, paddle_y, -paddle.degree)
         magic_vx, magic_vy = self.__rotate_xy_around_pivot(self.vx, self.vy, 0, 0, -paddle.degree)
-        
-        dx = abs(magic_x - paddle.x) - self.size - paddle.width/2
-        dy = abs(magic_y - paddle.y) - self.size - paddle.height/2
+        dx = abs(magic_x - paddle_x) - self.size - paddle.width/2
+        dy = abs(magic_y - paddle_y) - self.size - paddle.height/2
 
         if dx > dy:
             magic_vx = -magic_vx

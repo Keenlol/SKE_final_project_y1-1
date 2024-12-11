@@ -12,7 +12,7 @@ class Player(Paddle):
 
         self.x = pos[0]
         self.y = pos[1]
-        self.tilt_degree = 45
+        self.tilt_degree = 40
         self.move_per_step = self.height*0.8
 
     def __initailize_input_set(self):

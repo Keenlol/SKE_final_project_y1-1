@@ -1,9 +1,10 @@
 class Event:
-    def __init__(self, time, ball_a, ball_b, paddle):
+    def __init__(self, time, ball_a, ball_b, paddle, paddle_pos_snapshot):
         self.time = time
         self.a = ball_a
         self.b = ball_b
         self.paddle = paddle
+        self.paddle_pos_snapshot = paddle_pos_snapshot
 
         if ball_a is not None:
             self.count_a = ball_a.count

@@ -186,5 +186,9 @@ class Ball:
         self.color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
         self.count += 1
 
+    def respawn(self):
+        self.x = 0
+        self.y = 0
+
     def __str__(self):
         return f"ball id={self.id} pos=({self.x:.2f}, {self.y:.2f}) v=({self.vx:.2f}, {self.vy:.2f}) count={self.count}"

@@ -1,14 +1,14 @@
 import turtle
-from math import sin, pi
 
 class Paddle:
-    def __init__(self, width, height, color):
+    def __init__(self, width, height, color, thickness=10):
         self.width = width
         self.height = height
         self.x = 0
         self.y = 0
         self.degree = 0
         self.color = color
+        self.thickness = thickness
         turtle.penup()
         turtle.setheading(0)
         turtle.hideturtle()
@@ -20,6 +20,7 @@ class Paddle:
 #16 31
     def draw(self):
         turtle.color(self.color)
+        turtle.pensize(self.thickness)
         turtle.goto(self.x, self.y)
         turtle.setheading(self.degree)
         turtle.forward(self.width/2)

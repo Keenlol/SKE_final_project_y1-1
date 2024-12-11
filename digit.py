@@ -2,12 +2,19 @@ import turtle
 
 class Digit:
     def __init__(self, pos, width, height, color, thickness) -> None:
-        self.x = pos[0]
-        self.y = pos[1]
         self.color = color
         self.thickness = thickness
         self.width = width
         self.height = height
+        self.pos = pos
+
+    @property
+    def pos(self):
+        return self.x, self.y
+    @pos.setter
+    def pos(self, pos):
+        self.x = pos[0]
+        self.y = pos[1]
 
         dx = self.width/2
         dy = self.height/2
@@ -54,3 +61,6 @@ class Digit:
             self.__draw_sequence([6,0,2,8,6,3,5])
         if digit == 9:
             self.__draw_sequence([5,3,0,2,8,6])
+    
+    def __str__(self) -> str:
+        return f"digit pos=({self.x:.2f}, {self.y:.2f})"

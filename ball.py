@@ -5,7 +5,7 @@ import random
 class Ball:
     def __init__(self, size_range, color, id, canvas_width, canvas_height):
         self.size_range = size_range
-        self.base_speed = 10
+        self.base_speed = 8
         self.color = color
         self.count = 0
         self.id = id
@@ -31,10 +31,12 @@ class Ball:
     def bounce_off_vertical_wall(self):
         self.vx = -self.vx
         self.count += 1
+        self.__update_color()
 
     def bounce_off_horizontal_wall(self):
         self.vy = -self.vy
         self.count += 1
+        self.__update_color()
 
     def bounce_off(self, that):
         dx  = that.x - self.x
@@ -60,6 +62,8 @@ class Ball:
         # update collision counts
         self.count += 1
         that.count += 1
+        self.__update_color()
+        that.__update_color()
 
     def distance(self, that):
         x1 = self.x
@@ -170,23 +174,29 @@ class Ball:
             return math.inf
 
     def bounce_off_paddle(self, paddle, paddle_pos_snapshot):
+        if not (paddle.x == paddle_pos_snapshot[0] and paddle.y == paddle_pos_snapshot[1]):
+            return
 
         magic_x, magic_y = self.__rotate_xy_around_pivot(self.x, self.y, paddle.x, paddle.y, -paddle.degree)
         magic_vx, magic_vy = self.__rotate_xy_around_pivot(self.vx, self.vy, 0, 0, -paddle.degree)
         dx = abs(magic_x - paddle.x) - self.size - paddle.width/2
         dy = abs(magic_y - paddle.y) - self.size - paddle.height/2
 
-        if dx > dy and paddle_pos_snapshot[0] == paddle.x:
+        if dx > dy:
             magic_vx = -magic_vx
-        elif paddle_pos_snapshot[1] == paddle.y:
+        else:
             magic_vy = -magic_vy
         
         # Convert velocity back to world coordinates
         self.vx, self.vy = self.__rotate_xy_around_pivot(magic_vx, magic_vy, 0, 0, paddle.degree)
         
-        # Add some randomization to make it more interesting
-        self.color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
+        # Add some randomization to make it more interesting 
+        current_angle_rad = math.atan2(self.vy,self.vx)
+        self.vx += self.base_speed * math.cos(current_angle_rad) * 0.1
+        self.vy += self.base_speed * math.sin(current_angle_rad) * 0.1
         self.count += 1
+
+        self.__update_color()
 
     def respawn(self):
         angle_rad = math.radians(random.randint(0, 360))
@@ -195,7 +205,32 @@ class Ball:
         self.vx = self.base_speed * math.cos(angle_rad)
         self.vy = self.base_speed * math.sin(angle_rad)
         self.size = random.randint(self.size_range[0], self.size_range[1])
-        self.mass = math.pi * 10 * self.size**2
+        self.mass = math.pi * self.size**2
 
+        self.__update_color()
+    
+    def __update_color(self):
+        color_gradient = [(200,200,200),(200,20,255)]
+        
+        current_speed = math.dist([0,0], [self.vx, self.vy])
+        current_energy = (1/2) * self.mass * current_speed**2
+        min_energy = 0
+        max_energy = 800000
+        gradient_multiplier = (current_energy - min_energy)/(max_energy - min_energy)
+
+        if gradient_multiplier > 1:
+            gradient_multiplier = 1
+
+        print("gradienenenen",gradient_multiplier)
+
+        dR = color_gradient[1][0] - color_gradient[0][0] 
+        dG = color_gradient[1][1] - color_gradient[0][1] 
+        dB = color_gradient[1][2] - color_gradient[0][2] 
+
+        self.color = (int(color_gradient[0][0] + dR*gradient_multiplier), 
+                      int(color_gradient[0][1] + dG*gradient_multiplier), 
+                      int(color_gradient[0][2] + dB*gradient_multiplier))
+
+        
     def __str__(self):
         return f"ball id={self.id} pos=({self.x:.2f}, {self.y:.2f}) v=({self.vx:.2f}, {self.vy:.2f}) count={self.count}"

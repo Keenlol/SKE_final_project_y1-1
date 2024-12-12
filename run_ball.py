@@ -30,8 +30,8 @@ class BouncingSimulator:
         # self.my_paddle = Paddle(200, 50, (255, 0, 0))
         # self.my_paddle.set_location([0, -50])
 
-        player1 = Player(id=1, color="red", width=10, height=150, pos=[-400, 0], canvas_info=[self.canvas_width, self.canvas_height])
-        player2 = Player(id=2, color="blue", width=10, height=150, pos=[400, 0], canvas_info=[self.canvas_width, self.canvas_height])
+        player1 = Player(id=1, color="red", width=10, height=150, pos=[-420, 0], canvas_info=[self.canvas_width, self.canvas_height])
+        player2 = Player(id=2, color="blue", width=10, height=150, pos=[420, 0], canvas_info=[self.canvas_width, self.canvas_height])
         self.player_list = [player1, player2]
 
         thickness = 20

@@ -3,18 +3,16 @@ import math
 import random
 
 class Ball:
-    def __init__(self, size, x, y, vx, vy, color, id, canvas_width, canvas_height):
-        self.size = size
-        self.x = x
-        self.y = y
-        self.vx = vx
-        self.vy = vy
+    def __init__(self, size_range, color, id, canvas_width, canvas_height):
+        self.size_range = size_range
+        self.base_speed = 10
         self.color = color
-        self.mass = 100*size**2
         self.count = 0
         self.id = id
         self.canvas_width = canvas_width
         self.canvas_height = canvas_height
+
+        self.respawn()
         
 
     def draw(self):
@@ -158,7 +156,10 @@ class Ball:
         if (magic_vy < 0) and ((magic_y - self.size) < (paddle.y + paddle.height/2)):
             return math.inf
 
+        if magic_vy == 0:
+            return math.inf
         dty = (abs(paddle.y - magic_y) - self.size - paddle.height/2) / abs(magic_vy)
+
 
         paddle_left_edge = paddle.x - paddle.width/2
         paddle_right_edge = paddle.x + paddle.width/2
@@ -188,8 +189,13 @@ class Ball:
         self.count += 1
 
     def respawn(self):
+        angle_rad = math.radians(random.randint(0, 360))
         self.x = 0
         self.y = 0
+        self.vx = self.base_speed * math.cos(angle_rad)
+        self.vy = self.base_speed * math.sin(angle_rad)
+        self.size = random.randint(self.size_range[0], self.size_range[1])
+        self.mass = math.pi * 10 * self.size**2
 
     def __str__(self):
         return f"ball id={self.id} pos=({self.x:.2f}, {self.y:.2f}) v=({self.vx:.2f}, {self.vy:.2f}) count={self.count}"

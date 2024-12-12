@@ -22,14 +22,10 @@ class BouncingSimulator:
         self.canvas_height = turtle.screensize()[1]
         print(self.canvas_width, self.canvas_height)
 
-        ball_radius = 30
+        ball_radius = [20, 40]
         for i in range(self.num_balls):
-            x = -self.canvas_width + (i+1)*(2*self.canvas_width/(self.num_balls+1))
-            y = 0.0
-            vx = 10*random.uniform(-1.0, 1.0)
-            vy = 10*random.uniform(-1.0, 1.0)
             ball_color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
-            self.ball_list.append(Ball(ball_radius, x, y, vx, vy, ball_color, i, self.canvas_width, self.canvas_height))
+            self.ball_list.append(Ball(ball_radius, ball_color, i, self.canvas_width, self.canvas_height))
 
         # self.my_paddle = Paddle(200, 50, (255, 0, 0))
         # self.my_paddle.set_location([0, -50])

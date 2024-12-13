@@ -1,6 +1,6 @@
 import turtle
 import copy
-from digit import Digit
+from digit import Char
 import math
 
 class Number:
@@ -11,7 +11,7 @@ class Number:
         self.y = pos[1]
         self.digit_width = digit_size[0]
         self.digit_height = digit_size[1]
-        self.digit_list = [Digit(pos, self.digit_width, self.digit_height, color, thickness)]
+        self.digit_list = [Char(pos, self.digit_width, self.digit_height, color, thickness)]
 
     def __update_number_of_digit(self):
         n_digit = 1

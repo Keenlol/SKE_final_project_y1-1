@@ -7,16 +7,16 @@ class Char:
         self.width = width
         self.height = height
         self.pos = pos
-        self.__draw_seq = {0: [6,0,2,8,6],
-                          1: [3,1,7],
-                          2: [3,0,2,5,6,8],
-                          3: [0,2,4,5,8,6],
-                          4: [1,3,5,2,8],
-                          5: [2,0,3,5,8,6],
-                          6: [2,0,6,8,5,3],
-                          7: [0,2,7],
-                          8: [6,0,2,8,6,3,5],
-                          9: [5,3,0,2,8,6],
+        self.__draw_seq = {"0": [6,0,2,8,6],
+                          "1": [3,1,7],
+                          "2": [3,0,2,5,6,8],
+                          "3": [0,2,4,5,8,6],
+                          "4": [1,3,5,2,8],
+                          "5": [2,0,3,5,8,6],
+                          "6": [2,0,6,8,5,3],
+                          "7": [0,2,7],
+                          "8": [6,0,2,8,6,3,5],
+                          "9": [5,3,0,2,8,6],
                           "A": [6,3,1,5,8,5,3],
                           "B": [0,6,8,5,4,2,0],
                           "C": [2,0,6,8],
@@ -72,13 +72,13 @@ class Char:
         turtle.pendown()
 
         sequence = self.__draw_seq[char]
+        print(sequence)
 
         turtle.penup()
         turtle.goto(self.grid_points[sequence[0]][0], self.grid_points[sequence[0]][1])
         turtle.pendown()
-        sequence.pop(0)
-        for points in sequence:
-            turtle.goto(self.grid_points[points][0], self.grid_points[points][1])
+        for i in range(1, len(sequence)):
+            turtle.goto(self.grid_points[i][0], self.grid_points[i][1])
         turtle.penup()
     
     def __str__(self) -> str:

@@ -1,57 +1,45 @@
 import copy
 from char import Char
-import math
 
-class Number:
-    def __init__(self, pos, digit_size, color, thickness, spacing) -> None:
-        self.number = 0
+class Text:
+    def __init__(self, pos, char_size, color, thickness, spacing) -> None:
+        self.text = 0
         self.spacing = spacing
         self.x = pos[0]
         self.y = pos[1]
-        self.digit_width = digit_size[0]
-        self.digit_height = digit_size[1]
-        self.digit_list = [Char(pos, self.digit_width, self.digit_height, color, thickness)]
+        self.char_width = char_size[0]
+        self.char_height = char_size[1]
+        self.char_list = [Char(pos, self.char_width, self.char_height, color, thickness)]
 
-    def __update_number_of_digit(self):
-        n_digit = 1
-        tmp = self.number
-        while math.floor(tmp) >= 10:
-            tmp /= 10
-            n_digit += 1
-        print(n_digit)
-        diff = len(self.digit_list) - n_digit
+    def __update_number_of_char(self):
+        diff = len(self.char_list) - len(self.text)
         if diff < 0:
             for _ in range(-diff):
-                more_digit = copy.deepcopy(self.digit_list[0])
-                self.digit_list.append(more_digit)
+                more_char = copy.deepcopy(self.char_list[0])
+                self.char_list.append(more_char)
         elif diff > 0:
             for _ in range(diff):
-                self.digit_list.pop()
+                self.char_list.pop()
 
-    def __update_digit_positions(self):
-        center_diff = self.spacing + self.digit_width
-        n_digit = len(self.digit_list)
+    def __update_char_positions(self):
+        center_diff = self.spacing + self.char_width
+        n_char = len(self.char_list)
 
-        if n_digit % 2 == 1:
-            starting_x = self.x + (n_digit)/2 * center_diff
-            for i in range(len(self.digit_list)):
-                self.digit_list[i].pos = [starting_x - (center_diff * i), self.y]
+        if n_char % 2 == 1:
+            starting_x = self.x + (n_char)/2 * center_diff
+            for i in range(len(self.char_list)):
+                self.char_list[i].pos = [starting_x - (center_diff * i), self.y]
         else:
-            starting_x = self.x + (((n_digit)/2) - 0.5) * center_diff 
-            for i in range(len(self.digit_list)):
-                self.digit_list[i].pos = [starting_x - (center_diff * i), self.y]
+            starting_x = self.x + (((n_char)/2) - 0.5) * center_diff
+            for i in range(len(self.char_list)):
+                self.char_list[i].pos = [starting_x - (center_diff * i), self.y]
 
-    def __draw_the_digit(self):
-        tmp = self.number
+    def __draw_the_text(self):
+        for i in range(len(self.char_list)):
+            self.char_list[i].draw(self.text[i])
 
-        for i in range(len(self.digit_list)):
-            self.digit_list[i].draw(tmp % 10)
-            tmp = math.floor(tmp / 10)
-
-    def draw(self, number):
-        self.number = number
-        self.__update_number_of_digit()
-        self.__update_digit_positions()
-        self.__draw_the_digit()
-
-        
+    def draw(self, text):
+        self.text = text
+        self.__update_number_of_char()
+        self.__update_char_positions()
+        self.__draw_the_text()

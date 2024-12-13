@@ -1,7 +1,7 @@
 from ball import Ball
 from my_event import Event
 from player import Player
-from number import Number
+from number import Text
 import turtle
 import random
 import heapq
@@ -35,10 +35,10 @@ class BouncingSimulator:
         self.player_list = [player1, player2]
 
         thickness = 20
-        digit_size = [30,70]
+        char_size = [30,70]
         spacing = 30
-        ui_score1 = Number(pos=[-600,0], digit_size=digit_size, color=("red"), thickness=thickness, spacing=spacing)
-        ui_score2 = Number(pos=[600,0], digit_size=digit_size, color=("blue"), thickness=thickness, spacing=spacing)
+        ui_score1 = Text(pos=[-600,0], char_size=char_size, color=("red"), thickness=thickness, spacing=spacing)
+        ui_score2 = Text(pos=[600,0], char_size=char_size, color=("blue"), thickness=thickness, spacing=spacing)
         self.ui_score_list = [ui_score1, ui_score2]
         self.screen = turtle.Screen()
 
@@ -95,7 +95,7 @@ class BouncingSimulator:
 
         for i in range(len(self.player_list)):
             self.player_list[i].draw()
-            self.ui_score_list[i].draw(self.player_list[i].score)
+            self.ui_score_list[i].draw(str(self.player_list[i].score))
         for a_ball in self.ball_list:
             a_ball.draw()
 

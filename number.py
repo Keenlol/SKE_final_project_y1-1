@@ -1,6 +1,5 @@
-import turtle
 import copy
-from digit import Char
+from char import Char
 import math
 
 class Number:

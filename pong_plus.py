@@ -6,10 +6,12 @@ from button import Button
 import turtle, random, heapq
 
 class PongPlus:
-    def __init__(self, num_balls):
+    def __init__(self, num_balls, player_names, player_colors):
         self.num_balls = num_balls
         self.ball_list = []
         self.player_list = []
+        self.player_names = player_names
+        self.player_colors = player_colors
         self.t = 0.0
         self.pq = []
         self.HZ = 4
@@ -27,17 +29,13 @@ class PongPlus:
 
 
     def __create_objects(self):
-        self.ball_list = []
-        self.player_list = []
-        self.ui_score_list = []
-
         ball_radius = [20, 40]
         for i in range(self.num_balls):
             ball_color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
             self.ball_list.append(Ball(ball_radius, ball_color, i, self.canvas_width, self.canvas_height))
 
-        player1 = Player(name="PLAYER 1",id=1, color="red", width=10, height=150, pos=[-420, 0], canvas_info=[self.canvas_width, self.canvas_height])
-        player2 = Player(name="PLAYER 2", id=2, color="blue", width=10, height=150, pos=[420, 0], canvas_info=[self.canvas_width, self.canvas_height])
+        player1 = Player(name=self.player_names[0],id=1, color=self.player_colors[0], width=10, height=150, pos=[-420, 0], canvas_info=[self.canvas_width, self.canvas_height])
+        player2 = Player(name=self.player_names[1], id=2, color=self.player_colors[1], width=10, height=150, pos=[420, 0], canvas_info=[self.canvas_width, self.canvas_height])
         self.player_list = [player1, player2]
 
         ui_score1 = Text(text=player1.score ,pos=[-600,0], char_size=[30,70], color=("red"), thickness=20, spacing=30)
@@ -199,6 +197,4 @@ class PongPlus:
         turtle.done()
 
 # num_balls = int(input("Number of balls to simulate: "))
-num_balls = 2
-my_simulator = PongPlus(num_balls)
-my_simulator.play()
+

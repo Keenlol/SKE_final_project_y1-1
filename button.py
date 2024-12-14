@@ -19,9 +19,9 @@ class Button(Text):
         return cursor_x, cursor_y
 
     def is_hovered(self, x, y):
-        bottom_right = [self.char_list[0].grid_points[8][0] + self.extra_size,
+        bottom_right = [self.char_list[0].grid_points[8][0] - self.extra_size,
                        self.char_list[0].grid_points[8][1] - self.extra_size]
-        top_left = [self.char_list[-1].grid_points[0][0] - self.extra_size,
+        top_left = [self.char_list[-1].grid_points[0][0] + self.extra_size,
                     self.char_list[-1].grid_points[0][1] + self.extra_size]
         
         return bottom_right[0] <= x <= top_left[0] and bottom_right[1] <= y <= top_left[1]

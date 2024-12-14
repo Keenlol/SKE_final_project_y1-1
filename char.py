@@ -72,13 +72,12 @@ class Char:
         turtle.pendown()
 
         sequence = self.__draw_seq[char]
-        print(sequence)
-
         turtle.penup()
         turtle.goto(self.grid_points[sequence[0]][0], self.grid_points[sequence[0]][1])
         turtle.pendown()
         for i in range(1, len(sequence)):
-            turtle.goto(self.grid_points[i][0], self.grid_points[i][1])
+            turtle.goto(self.grid_points[sequence[i]][0], self.grid_points[sequence[i]][1])
+            print("goto:", self.grid_points[sequence[i]][0], self.grid_points[sequence[i]][1])
         turtle.penup()
     
     def __str__(self) -> str:

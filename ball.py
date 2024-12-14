@@ -5,7 +5,7 @@ import random
 class Ball:
     def __init__(self, size_range, color, id, canvas_width, canvas_height):
         self.size_range = size_range
-        self.base_speed = 8
+        self.base_speed = 9
         self.color = color
         self.count = 0
         self.id = id

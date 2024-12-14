@@ -26,13 +26,12 @@ class Text:
         n_char = len(self.char_list)
 
         if n_char % 2 == 1:
-            starting_x = self.x + (n_char)/2 * center_diff
-            for i in range(len(self.char_list)):
-                self.char_list[i].pos = [starting_x - (center_diff * i), self.y]
+            starting_x = self.x - (n_char)/2 * center_diff
         else:
-            starting_x = self.x + (((n_char)/2) - 0.5) * center_diff
-            for i in range(len(self.char_list)):
-                self.char_list[i].pos = [starting_x - (center_diff * i), self.y]
+            starting_x = self.x - (((n_char)/2) - 0.5) * center_diff
+
+        for i in range(len(self.char_list)):
+            self.char_list[i].pos = [starting_x + (center_diff * i), self.y]
 
     def __draw_the_text(self):
         for i in range(len(self.char_list)):

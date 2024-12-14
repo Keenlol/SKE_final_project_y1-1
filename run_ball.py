@@ -1,7 +1,8 @@
 from ball import Ball
 from my_event import Event
 from player import Player
-from number import Text
+from text import Text
+from button import Button
 import turtle, random, heapq, copy
 
 class BouncingSimulator:
@@ -34,8 +35,8 @@ class BouncingSimulator:
         player2 = Player(name="PLAYER 2", id=2, color="blue", width=10, height=150, pos=[420, 0], canvas_info=[self.canvas_width, self.canvas_height])
         self.player_list = [player1, player2]
 
-        ui_score1 = Text(pos=[-600,0], char_size=[30,70], color=("red"), thickness=20, spacing=30)
-        ui_score2 = Text(pos=[600,0], char_size=[30,70], color=("blue"), thickness=20, spacing=30)
+        ui_score1 = Text(text=player1.score ,pos=[-600,0], char_size=[30,70], color=("red"), thickness=20, spacing=30)
+        ui_score2 = Text(text=player1.score ,pos=[600,0], char_size=[30,70], color=("blue"), thickness=20, spacing=30)
         self.ui_score_list = [ui_score1, ui_score2]
 
         self.screen = turtle.Screen()
@@ -91,7 +92,8 @@ class BouncingSimulator:
 
         for i in range(len(self.player_list)):
             self.player_list[i].draw()
-            self.ui_score_list[i].draw(str(self.player_list[i].score))
+            self.ui_score_list[i].text = str(self.player_list[i].score)
+            self.ui_score_list[i].draw()
         for a_ball in self.ball_list:
             a_ball.draw()
 
@@ -106,21 +108,6 @@ class BouncingSimulator:
                 heapq.heappush(self.pq, Event(self.t + dtPX, a_ball, None, a_player, [a_player.x, a_player.y]))
                 heapq.heappush(self.pq, Event(self.t + dtPY, a_ball, None, a_player, [a_player.x, a_player.y]))
 
-    def __get_cursor_pos(self):
-        canvas = turtle.getcanvas()
-        raw_x = canvas.winfo_pointerx()
-        raw_y = canvas.winfo_pointery()
-
-        max_raw_x = 1535 #I measured these
-        max_raw_y = -863
-
-        percent_x = (raw_x/max_raw_x) - 0.5
-        percent_y = (raw_y/max_raw_y) + 0.5
-
-        cursor_x = percent_x * (1920)
-        cursor_y = percent_y * (1080)
-        return cursor_x, cursor_y
-
     def __winning_screen(self):
         if self.player_list[0].score > self.player_list[1].score:
             color = self.player_list[0].color
@@ -128,23 +115,15 @@ class BouncingSimulator:
         else:
             color = self.player_list[1].color
             name = self.player_list[1].name
-        ui_winning_text = Text(pos=[0,40], char_size=[40,90], color=color, thickness=20, spacing=30)
-        ui_retry = Text(pos=[0,-70], char_size=[30,40], color=(100,100,100), thickness=15, spacing=20)
+
+        ui_winning_text = Text(text=str(name+" WON") ,pos=[0,40], char_size=[40,90], color=color, thickness=20, spacing=30)
+        ui_retry = Button(text="RETRY",pos=[0,-70], char_size=[30,40], idle_color=(100,100,100), hover_color=(50,200,50), thickness=15, spacing=20)
+        print(ui_winning_text.text)
 
         while True:
             turtle.clear()
-            cursor_x, cursor_y = self.__get_cursor_pos()
-            print("cur x and y",cursor_x, cursor_y)
-            bottom_right = ui_retry.char_list[0].grid_points[8]
-            top_left = ui_retry.char_list[-1].grid_points[0]
-
-            if top_left[0] <= cursor_x <= bottom_right[0] and top_left[1] <= cursor_y <= bottom_right[1]:
-                ui_retry.color = (50,230,50)
-            else:
-                ui_retry.color = (100,100,100)
-
-            ui_winning_text.draw(name + " WON")
-            ui_retry.draw("RETRY")
+            ui_winning_text.draw()
+            ui_retry.draw_animation()
             turtle.update()
         
 

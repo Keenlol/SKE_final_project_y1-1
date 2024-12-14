@@ -210,26 +210,30 @@ class Ball:
         self.__update_color()
     
     def __update_color(self):
-        color_gradient = [(200,200,200),(200,20,255)]
+        color_gradient = [(200,230,255),(230,20,20)]
         
         current_speed = math.dist([0,0], [self.vx, self.vy])
         current_energy = (1/2) * self.mass * current_speed**2
-        min_energy = 0
-        max_energy = 800000
+        min_energy = 8000
+        max_energy = 1000000
         gradient_multiplier = (current_energy - min_energy)/(max_energy - min_energy)
-
-        if gradient_multiplier > 1:
-            gradient_multiplier = 1
-
-        print("gradienenenen",gradient_multiplier)
 
         dR = color_gradient[1][0] - color_gradient[0][0] 
         dG = color_gradient[1][1] - color_gradient[0][1] 
         dB = color_gradient[1][2] - color_gradient[0][2] 
 
-        self.color = (int(color_gradient[0][0] + dR*gradient_multiplier), 
-                      int(color_gradient[0][1] + dG*gradient_multiplier), 
-                      int(color_gradient[0][2] + dB*gradient_multiplier))
+        red = color_gradient[0][0] + dR*gradient_multiplier
+        green = color_gradient[0][1] + dG*gradient_multiplier
+        blue = color_gradient[0][2] + dB*gradient_multiplier
+
+        if red > 255:
+            red = 255
+        if green > 255:
+            green = 255
+        if blue > 255:
+            blue = 255
+
+        self.color = (red, green, blue)
 
         
     def __str__(self):

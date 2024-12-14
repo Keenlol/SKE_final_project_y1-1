@@ -2,8 +2,8 @@ import copy
 from char import Char
 
 class Text:
-    def __init__(self, pos, char_size, color, thickness, spacing) -> None:
-        self.text = 0
+    def __init__(self ,text ,pos, char_size, color, thickness, spacing) -> None:
+        self.text = text
         self.spacing = spacing
         self.x = pos[0]
         self.y = pos[1]
@@ -42,8 +42,7 @@ class Text:
         for i in range(len(self.char_list)):
             self.char_list[i].draw(self.text[i])
 
-    def draw(self, text):
-        self.text = text
+    def draw(self):
         self.__update_char_style()
         self.__update_number_of_char()
         self.__update_char_positions()

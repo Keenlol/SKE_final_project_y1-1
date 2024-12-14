@@ -118,10 +118,12 @@ class BouncingSimulator:
 
         ui_winning_text = Text(text=str(name+" WON") ,pos=[0,40], char_size=[40,90], color=color, thickness=20, spacing=30)
         ui_retry = Button(text="RETRY",pos=[0,-70], char_size=[30,40], idle_color=(100,100,100), hover_color=(50,200,50), thickness=15, spacing=20)
+        ui_quit = Button(text="QUIT",pos=[0,-150], char_size=[30,40], idle_color=(100,100,100), hover_color=(200,50,50), thickness=15, spacing=20)
         print(ui_winning_text.text)
 
         while True:
             turtle.clear()
+            ui_quit.draw_animation()
             ui_winning_text.draw()
             ui_retry.draw_animation()
             turtle.update()

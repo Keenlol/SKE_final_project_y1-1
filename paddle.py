@@ -37,8 +37,5 @@ class Paddle:
         turtle.penup()
         turtle.goto(self.x, self.y)
 
-    def clear(self):
-        turtle.clear()
-
     def __str__(self):
         return f"paddle ({self.x:.2f}, {self.y:.2f}) a: {self.degree}*"

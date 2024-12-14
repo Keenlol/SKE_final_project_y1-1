@@ -206,7 +206,7 @@ class Ball:
         self.vy = self.base_speed * math.sin(angle_rad)
         self.size = random.randint(self.size_range[0], self.size_range[1])
         self.mass = math.pi * self.size**2
-
+        self.count += 1
         self.__update_color()
     
     def __update_color(self):

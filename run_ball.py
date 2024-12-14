@@ -2,9 +2,7 @@ from ball import Ball
 from my_event import Event
 from player import Player
 from number import Text
-import turtle
-import random
-import heapq
+import turtle, random, heapq, copy
 
 class BouncingSimulator:
     def __init__(self, num_balls):

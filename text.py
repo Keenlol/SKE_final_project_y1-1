@@ -3,7 +3,7 @@ from char import Char
 
 class Text:
     def __init__(self ,text ,pos, char_size, color, thickness, spacing) -> None:
-        self.text = text
+        self.text = text.upper()
         self.spacing = spacing
         self.x = pos[0]
         self.y = pos[1]

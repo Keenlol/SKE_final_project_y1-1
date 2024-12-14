@@ -6,7 +6,7 @@ from button import Button
 import turtle, random, heapq
 
 class PongPlus:
-    def __init__(self, num_balls, player_names, player_colors):
+    def __init__(self, num_balls, player_names, player_colors, winning_score):
         self.num_balls = num_balls
         self.ball_list = []
         self.player_list = []
@@ -15,7 +15,7 @@ class PongPlus:
         self.t = 0.0
         self.pq = []
         self.HZ = 4
-        self.winning_score = 1
+        self.winning_score = winning_score
         turtle.speed(0)
         turtle.tracer(0)
         turtle.hideturtle()
@@ -38,8 +38,8 @@ class PongPlus:
         player2 = Player(name=self.player_names[1], id=2, color=self.player_colors[1], width=10, height=150, pos=[420, 0], canvas_info=[self.canvas_width, self.canvas_height])
         self.player_list = [player1, player2]
 
-        ui_score1 = Text(text=player1.score ,pos=[-600,0], char_size=[30,70], color=("red"), thickness=20, spacing=30)
-        ui_score2 = Text(text=player1.score ,pos=[600,0], char_size=[30,70], color=("blue"), thickness=20, spacing=30)
+        ui_score1 = Text(text=str(player1.score) ,pos=[-600,0], char_size=[30,70], color=self.player_colors[0], thickness=20, spacing=30)
+        ui_score2 = Text(text=str(player1.score) ,pos=[600,0], char_size=[30,70], color=self.player_colors[1], thickness=20, spacing=30)
         self.ui_score_list = [ui_score1, ui_score2]
 
 
@@ -66,7 +66,7 @@ class PongPlus:
         turtle.pensize(line_thickness)
         turtle.setheading(0)
 
-        for color_i in [color_left, color_right]:
+        for color_i in [color_right, color_left]:
             turtle.pendown()
             turtle.color(color_normal)
             turtle.forward(2*self.canvas_width)
@@ -87,8 +87,8 @@ class PongPlus:
 
         self.__draw_border(line_thickness=10, 
                            color_normal="black", 
-                           color_left=(150, 150, 255), 
-                           color_right=(255, 150, 150),
+                           color_left=self.player_colors[0], 
+                           color_right=self.player_colors[1],
                            n_interval=15)
                         
 
@@ -156,7 +156,6 @@ class PongPlus:
             current_event = heapq.heappop(self.pq)
             if not current_event.is_valid():
                 continue
-            print(current_event)
 
             ball_a = current_event.a
             ball_b = current_event.b

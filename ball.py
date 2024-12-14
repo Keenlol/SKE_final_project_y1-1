@@ -222,9 +222,9 @@ class Ball:
         dG = color_gradient[1][1] - color_gradient[0][1] 
         dB = color_gradient[1][2] - color_gradient[0][2] 
 
-        red = color_gradient[0][0] + dR*gradient_multiplier
-        green = color_gradient[0][1] + dG*gradient_multiplier
-        blue = color_gradient[0][2] + dB*gradient_multiplier
+        red = int(color_gradient[0][0] + dR*gradient_multiplier)
+        green = int(color_gradient[0][1] + dG*gradient_multiplier)
+        blue = int(color_gradient[0][2] + dB*gradient_multiplier)
 
         if red > 255:
             red = 255

@@ -12,10 +12,12 @@ class BouncingSimulator:
         self.t = 0.0
         self.pq = []
         self.HZ = 4
+        self.winning_score = 1
         turtle.speed(0)
         turtle.tracer(0)
         turtle.hideturtle()
         turtle.colormode(255)
+        turtle.setup(width=1920, height=1080, startx=0, starty=0)
         self.canvas_width = turtle.screensize()[0] + 100
         self.canvas_height = turtle.screensize()[1]
         print(self.canvas_width, self.canvas_height)
@@ -28,16 +30,14 @@ class BouncingSimulator:
         # self.my_paddle = Paddle(200, 50, (255, 0, 0))
         # self.my_paddle.set_location([0, -50])
 
-        player1 = Player(id=1, color="red", width=10, height=150, pos=[-420, 0], canvas_info=[self.canvas_width, self.canvas_height])
-        player2 = Player(id=2, color="blue", width=10, height=150, pos=[420, 0], canvas_info=[self.canvas_width, self.canvas_height])
+        player1 = Player(name="PLAYER 1",id=1, color="red", width=10, height=150, pos=[-420, 0], canvas_info=[self.canvas_width, self.canvas_height])
+        player2 = Player(name="PLAYER 2", id=2, color="blue", width=10, height=150, pos=[420, 0], canvas_info=[self.canvas_width, self.canvas_height])
         self.player_list = [player1, player2]
 
-        thickness = 20
-        char_size = [30,70]
-        spacing = 30
-        ui_score1 = Text(pos=[-600,0], char_size=char_size, color=("red"), thickness=thickness, spacing=spacing)
-        ui_score2 = Text(pos=[600,0], char_size=char_size, color=("blue"), thickness=thickness, spacing=spacing)
+        ui_score1 = Text(pos=[-600,0], char_size=[30,70], color=("red"), thickness=20, spacing=30)
+        ui_score2 = Text(pos=[600,0], char_size=[30,70], color=("blue"), thickness=20, spacing=30)
         self.ui_score_list = [ui_score1, ui_score2]
+
         self.screen = turtle.Screen()
 
     # updates priority queue with all new events for a_ball
@@ -81,8 +81,6 @@ class BouncingSimulator:
 
     def __redraw(self):
         turtle.clear()
-        for a_player in self.player_list:
-            a_player.clear()
 
         self.__draw_border(line_thickness=10, 
                            color_normal="black", 
@@ -107,6 +105,48 @@ class BouncingSimulator:
                 dtPY = a_ball.time_to_hit_paddle_horizontal(a_player)
                 heapq.heappush(self.pq, Event(self.t + dtPX, a_ball, None, a_player, [a_player.x, a_player.y]))
                 heapq.heappush(self.pq, Event(self.t + dtPY, a_ball, None, a_player, [a_player.x, a_player.y]))
+
+    def __get_cursor_pos(self):
+        canvas = turtle.getcanvas()
+        raw_x = canvas.winfo_pointerx()
+        raw_y = canvas.winfo_pointery()
+
+        max_raw_x = 1535 #I measured these
+        max_raw_y = -863
+
+        percent_x = (raw_x/max_raw_x) - 0.5
+        percent_y = (raw_y/max_raw_y) + 0.5
+
+        cursor_x = percent_x * (1920)
+        cursor_y = percent_y * (1080)
+        return cursor_x, cursor_y
+
+    def __winning_screen(self):
+        if self.player_list[0].score > self.player_list[1].score:
+            color = self.player_list[0].color
+            name = self.player_list[0].name
+        else:
+            color = self.player_list[1].color
+            name = self.player_list[1].name
+        ui_winning_text = Text(pos=[0,40], char_size=[40,90], color=color, thickness=20, spacing=30)
+        ui_retry = Text(pos=[0,-70], char_size=[30,40], color=(100,100,100), thickness=15, spacing=20)
+
+        while True:
+            turtle.clear()
+            cursor_x, cursor_y = self.__get_cursor_pos()
+            print("cur x and y",cursor_x, cursor_y)
+            bottom_right = ui_retry.char_list[0].grid_points[8]
+            top_left = ui_retry.char_list[-1].grid_points[0]
+
+            if top_left[0] <= cursor_x <= bottom_right[0] and top_left[1] <= cursor_y <= bottom_right[1]:
+                ui_retry.color = (50,230,50)
+            else:
+                ui_retry.color = (100,100,100)
+
+            ui_winning_text.draw(name + " WON")
+            ui_retry.draw("RETRY")
+            turtle.update()
+        
 
     def run(self):
         # initialize pq with collision events and redraw event
@@ -139,8 +179,10 @@ class BouncingSimulator:
             elif (ball_a is not None) and (ball_b is None) and (paddle_a is None):
                 if ball_a.x < 0:
                     self.player_list[1].score += 1
-                if ball_a.x > 0:
+                elif ball_a.x > 0:
                     self.player_list[0].score += 1
+                if self.player_list[0].score >= self.winning_score or self.player_list[1].score >= self.winning_score:
+                    break
                 ball_a.respawn()
             elif (ball_a is None) and (ball_b is not None) and (paddle_a is None):
                 ball_b.bounce_off_horizontal_wall()
@@ -154,7 +196,7 @@ class BouncingSimulator:
 
             # regularly update the prediction for the paddle as its position may always be changing due to keyboard events
             self.__paddle_predict()
-
+        self.__winning_screen()
 
         # hold the window; close it by clicking the window close 'x' mark
         turtle.done()

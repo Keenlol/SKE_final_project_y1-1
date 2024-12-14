@@ -3,7 +3,7 @@ from my_event import Event
 from player import Player
 from text import Text
 from button import Button
-import turtle, random, heapq, copy
+import turtle, random, heapq, sys
 
 class BouncingSimulator:
     def __init__(self, num_balls):
@@ -21,15 +21,20 @@ class BouncingSimulator:
         turtle.setup(width=1920, height=1080, startx=0, starty=0)
         self.canvas_width = turtle.screensize()[0] + 100
         self.canvas_height = turtle.screensize()[1]
-        print(self.canvas_width, self.canvas_height)
+        self.screen = turtle.Screen()
+
+        self.__create_objects()
+
+
+    def __create_objects(self):
+        self.ball_list = []
+        self.player_list = []
+        self.ui_score_list = []
 
         ball_radius = [20, 40]
         for i in range(self.num_balls):
             ball_color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
             self.ball_list.append(Ball(ball_radius, ball_color, i, self.canvas_width, self.canvas_height))
-
-        # self.my_paddle = Paddle(200, 50, (255, 0, 0))
-        # self.my_paddle.set_location([0, -50])
 
         player1 = Player(name="PLAYER 1",id=1, color="red", width=10, height=150, pos=[-420, 0], canvas_info=[self.canvas_width, self.canvas_height])
         player2 = Player(name="PLAYER 2", id=2, color="blue", width=10, height=150, pos=[420, 0], canvas_info=[self.canvas_width, self.canvas_height])
@@ -39,7 +44,6 @@ class BouncingSimulator:
         ui_score2 = Text(text=player1.score ,pos=[600,0], char_size=[30,70], color=("blue"), thickness=20, spacing=30)
         self.ui_score_list = [ui_score1, ui_score2]
 
-        self.screen = turtle.Screen()
 
     # updates priority queue with all new events for a_ball
     def __predict(self, a_ball):
@@ -117,19 +121,30 @@ class BouncingSimulator:
             name = self.player_list[1].name
 
         ui_winning_text = Text(text=str(name+" WON") ,pos=[0,40], char_size=[40,90], color=color, thickness=20, spacing=30)
-        ui_retry = Button(text="RETRY",pos=[0,-70], char_size=[30,40], idle_color=(100,100,100), hover_color=(50,200,50), thickness=15, spacing=20)
-        ui_quit = Button(text="QUIT",pos=[0,-150], char_size=[30,40], idle_color=(100,100,100), hover_color=(200,50,50), thickness=15, spacing=20)
-        print(ui_winning_text.text)
+        ui_retry = Button(text="REMATCH",pos=[0,-70], char_size=[30,40], idle_color=(100,100,100), hover_color=(50,200,50), thickness=15, spacing=20)
+        self.rematch = False
 
-        while True:
+        def on_click(x, y):
+            if ui_retry.is_hovered(x, y):
+                self.rematch = True
+                self.pq.clear()
+                self.t = 0
+                for a_ball in self.ball_list:
+                    a_ball.respawn()
+                for a_player in self.player_list:
+                    a_player.score = 0
+                self.run()
+
+        turtle.onscreenclick(on_click)
+
+        while self.rematch == False:
             turtle.clear()
-            ui_quit.draw_animation()
+            ui_retry.active()
             ui_winning_text.draw()
-            ui_retry.draw_animation()
             turtle.update()
-        
 
     def run(self):
+
         # initialize pq with collision events and redraw event
         for i in range(len(self.ball_list)):
             self.__predict(self.ball_list[i])
@@ -178,6 +193,7 @@ class BouncingSimulator:
             # regularly update the prediction for the paddle as its position may always be changing due to keyboard events
             self.__paddle_predict()
         self.__winning_screen()
+        turtle.bye()
 
         # hold the window; close it by clicking the window close 'x' mark
         turtle.done()

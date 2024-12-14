@@ -9,7 +9,12 @@ class Text:
         self.y = pos[1]
         self.char_width = char_size[0]
         self.char_height = char_size[1]
-        self.char_list = [Char(pos, self.char_width, self.char_height, color, thickness)]
+        self.thickness = thickness
+        self.color = color
+        self.__update_char_style()
+
+    def __update_char_style(self):
+        self.char_list = [Char([self.x, self.y], self.char_width, self.char_height, self.color, self.thickness)]
 
     def __update_number_of_char(self):
         diff = len(self.char_list) - len(self.text)
@@ -39,6 +44,7 @@ class Text:
 
     def draw(self, text):
         self.text = text
+        self.__update_char_style()
         self.__update_number_of_char()
         self.__update_char_positions()
         self.__draw_the_text()

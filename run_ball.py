@@ -3,9 +3,9 @@ from my_event import Event
 from player import Player
 from text import Text
 from button import Button
-import turtle, random, heapq, sys
+import turtle, random, heapq
 
-class BouncingSimulator:
+class PongPlus:
     def __init__(self, num_balls):
         self.num_balls = num_balls
         self.ball_list = []
@@ -133,7 +133,7 @@ class BouncingSimulator:
                     a_ball.respawn()
                 for a_player in self.player_list:
                     a_player.score = 0
-                self.run()
+                self.play()
 
         turtle.onscreenclick(on_click)
 
@@ -143,7 +143,7 @@ class BouncingSimulator:
             ui_winning_text.draw()
             turtle.update()
 
-    def run(self):
+    def play(self):
 
         # initialize pq with collision events and redraw event
         for i in range(len(self.ball_list)):
@@ -200,5 +200,5 @@ class BouncingSimulator:
 
 # num_balls = int(input("Number of balls to simulate: "))
 num_balls = 2
-my_simulator = BouncingSimulator(num_balls)
-my_simulator.run()
+my_simulator = PongPlus(num_balls)
+my_simulator.play()

@@ -13,7 +13,13 @@ class Button(Text):
         _extra_size (float): Additional size for hit detection area
     """
 
-    def __init__(self, text, pos, char_size, idle_color, thickness, spacing, hover_color) -> None:
+    def __init__(self, text: str, 
+                 pos: list, 
+                 char_size: list, 
+                 idle_color: tuple, 
+                 thickness: int, 
+                 spacing: float, 
+                 hover_color: tuple) -> None:
         """
         Initialize button with given parameters.
 

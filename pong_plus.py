@@ -24,7 +24,11 @@ class PongPlus:
         _base_ball_speed (float): Initial ball speed
     """
 
-    def __init__(self, num_balls, player_names, player_colors, winning_score, ball_speed=8):
+    def __init__(self, num_balls: int, 
+                 player_names: list, 
+                 player_colors: list, 
+                 winning_score: int, 
+                 ball_speed: float=8):
         """
         Initialize the game with specified parameters.
 

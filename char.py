@@ -22,7 +22,11 @@ class Char:
         _y (float): Y position of character center
         _grid_points (list): 3x3 grid of points used for character drawing
     """
-    def __init__(self, pos, width, height, color, thickness) -> None:
+    def __init__(self, pos: list, 
+                 width: float, 
+                 height: float, 
+                 color: tuple, 
+                 thickness: float) -> None:
         self._color = color
         self._thickness = thickness
         self._width = width

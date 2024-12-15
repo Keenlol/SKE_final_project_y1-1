@@ -1,3 +1,6 @@
+from ball import Ball
+from paddle import Paddle
+
 class Event:
     """
     A game event with timing information and involved objects.
@@ -11,7 +14,10 @@ class Event:
         _count_b (int): Collision count of ball_b at event creation
     """
 
-    def __init__(self, time, ball_a, ball_b, paddle):
+    def __init__(self, time: float, 
+                 ball_a: Ball, 
+                 ball_b: Ball, 
+                 paddle: Paddle):
         """
         Initialize an event with given parameters.
 

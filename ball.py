@@ -17,7 +17,11 @@ class Ball:
         _count (int): Collision counter
     """
 
-    def __init__(self, size_range, id, base_speed, border_size, color_gradient=[(200, 230, 255), (230, 20, 20)]):
+    def __init__(self, size_range: list, 
+                 id: int, 
+                 base_speed: float, 
+                 border_size: list, 
+                 color_gradient: list=[(200, 230, 255), (230, 20, 20)]):
         """
         Initialize a ball with given parameters.
 

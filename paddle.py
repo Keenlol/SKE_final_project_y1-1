@@ -18,7 +18,10 @@ class Paddle:
         __thickness (int): Line thickness for drawing
     """
 
-    def __init__(self, size, color, thickness=10, x=0, y=0):
+    def __init__(self, size: list, 
+                 color: tuple, 
+                 thickness: float=10, 
+                 pos: list=[0,0]):
         """
         Initialize paddle with given parameters.
 
@@ -31,8 +34,7 @@ class Paddle:
         """
         self._width = size[0]
         self._height = size[1]
-        self._x = x
-        self._y = y
+        self.pos = pos
         self._angle_deg = 0
         self._color = color
         self.__thickness = thickness

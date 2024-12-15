@@ -146,6 +146,7 @@ class PongPlus:
         turtle.penup()
 
     def __redraw(self):
+        """ Redraw everything"""
         turtle.clear()
 
         self.__draw_border(line_thickness=10,
@@ -205,6 +206,10 @@ class PongPlus:
 
         # reset the values and re-run the game if the "REMATCH" button is pressed
         def on_click(x, y):
+            """ 
+            a function for turtle to redirect to when mouse is clicked.
+            if the cursor overlap with the button when clicked then restart the game.
+            """
             if ui_retry.is_hovered(x, y):
                 self.__rematch = True
                 self._pq.clear()
@@ -286,7 +291,7 @@ class PongPlus:
             self.__paddle_predict()
 
     def play(self):
-        """ Play PongPlus"""
+        """ Play PongPlus, setup and run the game"""
         self.__adjust_hz()
         # initialize pq with collision events and redraw event
         for i in range(len(self._ball_list)):

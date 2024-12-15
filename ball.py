@@ -174,8 +174,8 @@ class Ball:
             return math.inf
 
     def bounce_off_paddle(self, paddle, paddle_pos_snapshot):
-        if not (paddle.x == paddle_pos_snapshot[0] and paddle.y == paddle_pos_snapshot[1]):
-            return
+        # if not (paddle.x == paddle_pos_snapshot[0] and paddle.y == paddle_pos_snapshot[1]):
+        #     return
 
         magic_x, magic_y = self.__rotate_xy_around_pivot(self.x, self.y, paddle.x, paddle.y, -paddle.degree)
         magic_vx, magic_vy = self.__rotate_xy_around_pivot(self.vx, self.vy, 0, 0, -paddle.degree)

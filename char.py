@@ -2,6 +2,26 @@ import turtle
 
 
 class Char:
+    """
+    Represents a single character that can be drawn using turtle graphics.
+    
+    This class handles the drawing of alphanumeric characters using a grid-based system
+    where each character is drawn by connecting points on a 3x3 grid.
+
+    The grid and its represnting number:
+    0   1   2
+    3   4   5
+    6   7   8
+
+    Attributes:
+        _color (tuple): RGB color of the character
+        _thickness (int): Line thickness for drawing
+        _width (float): Width of the character
+        _height (float): Height of the character
+        _x (float): X position of character center
+        _y (float): Y position of character center
+        _grid_points (list): 3x3 grid of points used for character drawing
+    """
     def __init__(self, pos, width, height, color, thickness) -> None:
         self._color = color
         self._thickness = thickness
@@ -49,22 +69,41 @@ class Char:
 
     @property
     def pos(self):
+        """
+        Get the position of the character.
+
+        Returns:
+            tuple: (x, y) coordinates of character center
+        """
         return self._x, self._y
 
     @pos.setter
     def pos(self, pos):
+        """
+        Set the position of the character and update grid points.
+
+        Args:
+            pos (list): [x, y] new position
+        """
         self._x = pos[0]
         self._y = pos[1]
 
         dx = self._width/2
         dy = self._height/2
 
+        # Calculate 3x3 grid points relative to character center according to the given width and height
         self._grid_points = [[self._x-dx, self._y+dy], [self._x, self._y+dy], [self._x+dx, self._y+dy],
                              [self._x-dx, self._y], [self._x,
                                                      self._y], [self._x+dx, self._y],
                              [self._x-dx, self._y-dy], [self._x, self._y-dy], [self._x+dx, self._y-dy]]
 
     def draw(self, char):
+        """
+        Draw the specified character using turtle graphics.
+
+        Args:
+            char (str): Single character to draw
+        """
         turtle.penup()
         turtle.color(self._color)
         turtle.pensize(self._thickness)
@@ -72,13 +111,17 @@ class Char:
         turtle.setheading(0)
 
         sequence = self.__draw_seq[char]
+
         if not sequence == []:
-            turtle.goto(self._grid_points[sequence[0]]
-                        [0], self._grid_points[sequence[0]][1])
+            # Move to first point without drawing
+            turtle.goto(self._grid_points[sequence[0]][0], 
+                        self._grid_points[sequence[0]][1])
             turtle.pendown()
+            # Connect remaining points with lines
             for i in range(1, len(sequence)):
                 turtle.goto(
-                    self._grid_points[sequence[i]][0], self._grid_points[sequence[i]][1])
+                    self._grid_points[sequence[i]][0], 
+                    self._grid_points[sequence[i]][1])
             turtle.penup()
 
     def __str__(self) -> str:

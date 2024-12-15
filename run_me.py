@@ -21,7 +21,7 @@ print("- Choose Colors -")
 print("Avaliable_color : ", end="")
 
 for key in list(color_preset.keys()):
-    print(key, end=" ")
+    print(key, end=" / ")
 
 print()
 color1 = input("Player 1 color: ")

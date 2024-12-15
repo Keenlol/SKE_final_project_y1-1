@@ -8,7 +8,33 @@ import heapq
 
 
 class PongPlus:
+    """
+    Main game class that handles the Pong game logic and rendering.
+    
+    Attributes:
+        _num_balls (int): Number of balls in play
+        _ball_list (list): List of Ball objects
+        _player_list (list): List of Player objects
+        _player_names (list): List of player names
+        _player_colors (list): List of RGB colors for players
+        _t (float): Current simulation time
+        _pq (list): Priority queue for event handling
+        _HZ (int): Update frequency
+        _winning_score (int): Score needed to win
+        _base_ball_speed (float): Initial ball speed
+    """
+
     def __init__(self, num_balls, player_names, player_colors, winning_score, ball_speed=8):
+        """
+        Initialize the game with specified parameters.
+
+        Args:
+            num_balls (int): Number of balls in play
+            player_names (list): List of player names
+            player_colors (list): List of RGB colors for players
+            winning_score (int): Score needed to win
+            ball_speed (float, optional): Initial ball speed. Defaults to 8.
+        """
         self._num_balls = num_balls
         self._ball_list = []
         self._player_list = []
@@ -32,30 +58,41 @@ class PongPlus:
         self.__create_objects()
 
     def __create_objects(self):
+        """Create game objects including balls, players, and UI elements."""
+        # initialize balls
         for i in range(self._num_balls):
             self._ball_list.append(Ball(size_range=[20, 40], id=i, 
                                         border_size=[self._border_width, self._border_height], 
                                         base_speed=self._base_ball_speed))
 
+        # initialize player's paddles
         player1 = Player(name=self._player_names[0], id=1, color=self._player_colors[0], 
                         size=[10, 150], pos=[-420, 0], border_height=self._border_height)
         player2 = Player(name=self._player_names[1], id=2, color=self._player_colors[1], 
                         size=[10, 150], pos=[420, 0], border_height=self._border_height)
         self._player_list = [player1, player2]
 
+        # initailize player's score ui
         ui_score1 = Text(text=str(player1._score), pos=[-600, 0], char_size=[30, 70], 
                         color=self._player_colors[0], thickness=20, spacing=30)
         ui_score2 = Text(text=str(player2._score), pos=[600, 0], char_size=[30, 70], 
                         color=self._player_colors[1], thickness=20, spacing=30)
         self.ui_score_list = [ui_score1, ui_score2]
 
+        # initialize player's name ui
         ui_name1 = Text(text=player1._name, pos=[-600, -65], char_size=[10, 15], 
                         color=self._player_colors[0], thickness=4, spacing=5)
         ui_name2 = Text(text=player2._name, pos=[600, -65], char_size=[10, 15], 
                         color=self._player_colors[1], thickness=4, spacing=5)
         self.ui_name_list = [ui_name1, ui_name2]
 
-    def __predict(self, a_ball):
+    def __ball_predict(self, a_ball):
+        """
+        Predict future collisions for a given ball.
+
+        Args:
+            a_ball (Ball): Ball object to predict collisions for
+        """
         if a_ball is None:
             return
 
@@ -73,17 +110,30 @@ class PongPlus:
         heapq.heappush(self._pq, Event(self._t + dtY, None, a_ball, None))
 
     def __draw_border(self, line_thickness, color_normal, color_left, color_right, n_interval):
+        """
+        Draw the game border with specified parameters.
+
+        Args:
+            line_thickness (int): Border line thickness
+            color_normal (tuple): RGB color for horizontal borders
+            color_left (tuple): RGB color for left border
+            color_right (tuple): RGB color for right border
+            n_interval (int): Number of dashed line intervals
+        """
         turtle.penup()
         turtle.goto(-self._border_width, -self._border_height)
         turtle.pensize(line_thickness)
         turtle.setheading(0)
 
+        # write the top/bottom border
         for color_i in [color_right, color_left]:
             turtle.pendown()
             turtle.color(color_normal)
             turtle.forward(2*self._border_width)
             turtle.left(90)
             turtle.color(color_i)
+
+            # write the left/right border with dashed line
             for i in range(1, n_interval+1):
                 if i % 2 == 1:
                     turtle.pendown()
@@ -91,6 +141,7 @@ class PongPlus:
                     turtle.penup()
                 else:
                     turtle.forward(2*self._border_height/n_interval)
+
             turtle.left(90)
         turtle.penup()
 
@@ -103,12 +154,14 @@ class PongPlus:
                            color_right=self._player_colors[1],
                            n_interval=15)
 
+        # draw players and also their name and score
         for i in range(len(self._player_list)):
             self._player_list[i].draw()
             self.ui_score_list[i]._text = str(self._player_list[i]._score)
             self.ui_score_list[i].draw()
             self.ui_name_list[i].draw()
 
+        # draw the balls
         for a_ball in self._ball_list:
             a_ball.draw()
 
@@ -117,6 +170,10 @@ class PongPlus:
             self._t + 1.0/self._HZ, None, None, None))
 
     def __paddle_predict(self):
+        """
+        predict the collision between the balls and paddles
+        both vertically and horizontally.
+        """
         for a_player in self._player_list:
             for a_ball in self._ball_list:
                 dtPX = a_ball.time_to_hit_paddle_vertical(a_player)
@@ -127,6 +184,8 @@ class PongPlus:
                     self._t + dtPY, a_ball, None, a_player))
 
     def __winning_screen(self):
+        """Display and run the ending screen"""
+        # set the display colors and name to the winning player
         if self._player_list[0]._score > self._player_list[1]._score:
             color = self._player_list[0]._color
             name = self._player_list[0]._name
@@ -134,6 +193,7 @@ class PongPlus:
             color = self._player_list[1]._color
             name = self._player_list[1]._name
 
+        # initialize the ui(s)
         ui_winning_text = Text(text=str(name+" WON"), pos=[0, 40], 
                                char_size=[40, 90], color=color, 
                                thickness=20, spacing=30)
@@ -143,6 +203,7 @@ class PongPlus:
 
         self.__rematch = False
 
+        # reset the values and re-run the game if the "REMATCH" button is pressed
         def on_click(x, y):
             if ui_retry.is_hovered(x, y):
                 self.__rematch = True
@@ -154,8 +215,10 @@ class PongPlus:
                     a_player._score = 0
                 self.play()
 
+        # go to the function above if the mouse is clicked
         turtle.onscreenclick(on_click)
 
+        # keep drawing the ui if the rematch button hasn't been pressed
         while self.__rematch == False:
             turtle.clear()
             ui_retry.active()
@@ -163,6 +226,10 @@ class PongPlus:
             turtle.update()
 
     def __adjust_hz(self):
+        """
+        Adjust the HZ based on the amount of character on the screen
+        to account for the lag it will cause.
+        """
         total_char = 0
 
         for a_player in self._player_list:
@@ -171,6 +238,9 @@ class PongPlus:
         self._HZ = 5 + total_char * (-0.1)
 
     def __playing_loop(self):
+        """
+        Main loop of the game, run all the interaction between objects.
+        """
         while (True):
             current_event = heapq.heappop(self._pq)
             if not current_event.is_valid():
@@ -194,10 +264,12 @@ class PongPlus:
             if (ball_a is not None) and (ball_b is not None) and (paddle_a is None):
                 ball_a.bounce_off_ball(ball_b)
             elif (ball_a is not None) and (ball_b is None) and (paddle_a is None):
+                # Detecting which side gain the score
                 if ball_a._x < 0:
                     player_2._score += 1
                 elif ball_a._x > 0:
                     player_1._score += 1
+                # break and go to the winning screen if a player wins
                 if player_1._score >= self._winning_score or player_2._score >= self._winning_score:
                     break
                 ball_a.respawn()
@@ -208,23 +280,24 @@ class PongPlus:
             elif (ball_a is not None) and (ball_b is None) and (paddle_a is not None):
                 ball_a.bounce_off_paddle(paddle_a)
 
-            self.__predict(ball_a)
-            self.__predict(ball_b)
-
-            # regularly update the prediction for the paddle as its position may always be changing due to keyboard events
+            # preedict the next collisions of the objects
+            self.__ball_predict(ball_a)
+            self.__ball_predict(ball_b)
             self.__paddle_predict()
 
     def play(self):
+        """ Play PongPlus"""
         self.__adjust_hz()
         # initialize pq with collision events and redraw event
         for i in range(len(self._ball_list)):
             self.__predict(self._ball_list[i])
         heapq.heappush(self._pq, Event(0, None, None, None))
 
-        # listen to keyboard events and activate move_left and move_right handlers accordingly
+        # listen to keyboard events and make player moves
         for a_player in self._player_list:
             a_player.get_input(self._screen)
 
+        # different phase of the game
         self.__playing_loop()
         self.__winning_screen()
         turtle.bye()

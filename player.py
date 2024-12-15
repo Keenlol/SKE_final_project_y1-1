@@ -13,8 +13,11 @@ class Player(Paddle):
 
         self.x = pos[0]
         self.y = pos[1]
-        self.tilt_degree = 40
+        self.max_tilt_degree = 40
+        self.target_degree = 0
         self.move_per_step = self.height*0.8
+        self.target_x = self.x
+        self.target_y = self.y
 
     def __initailize_input_set(self):
         if self.id == 1:
@@ -40,18 +43,26 @@ class Player(Paddle):
         
     
     def move_up(self):
-        if self.y < self.canvas_height/2:
-            self.set_location([self.x, self.y + self.move_per_step])
+        if self.target_y < self.canvas_height/2:
+            self.target_y += self.move_per_step
 
     def move_down(self):
-        if self.y > -self.canvas_height/2:
-            self.set_location([self.x, self.y - self.move_per_step])
+        if self.target_y > -self.canvas_height/2:
+            self.target_y -= self.move_per_step
+
+    def update_position(self):
+        dy = self.target_y - self.y
+        self.set_location([self.x, self.y + 0.3 * dy])
 
     def tilt_cw(self):
-        self.degree = -self.tilt_degree
+        self.target_degree = -self.max_tilt_degree
 
     def tilt_ccw(self):
-        self.degree = self.tilt_degree
+        self.target_degree = self.max_tilt_degree
     
     def tilt_reset(self):
-        self.degree = 0
+        self.target_degree = 0
+
+    def update_angle(self):
+        d_angle = self.target_degree - self.degree
+        self.degree = self.degree + d_angle * 0.3

@@ -32,7 +32,7 @@ class PongPlus:
         ball_radius = [20, 40]
         for i in range(self.num_balls):
             ball_color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
-            self.ball_list.append(Ball(ball_radius, ball_color, i, self.canvas_width, self.canvas_height))
+            self.ball_list.append(Ball(ball_radius, ball_color, i, self.canvas_width, self.canvas_height, 8))
 
         player1 = Player(name=self.player_names[0],id=1, color=self.player_colors[0], width=10, height=150, pos=[-420, 0], canvas_info=[self.canvas_width, self.canvas_height])
         player2 = Player(name=self.player_names[1], id=2, color=self.player_colors[1], width=10, height=150, pos=[420, 0], canvas_info=[self.canvas_width, self.canvas_height])
@@ -165,8 +165,13 @@ class PongPlus:
             # update positions, and then simulation clock
             for i in range(len(self.ball_list)):
                 self.ball_list[i].move(current_event.time - self.t)
-            self.t = current_event.time
 
+            for a_player in self.player_list:
+                a_player.update_position()
+                a_player.update_angle()
+
+            self.t = current_event.time    
+        
             if (ball_a is not None) and (ball_b is not None) and (paddle_a is None):
                 ball_a.bounce_off(ball_b)
             elif (ball_a is not None) and (ball_b is None) and (paddle_a is None):

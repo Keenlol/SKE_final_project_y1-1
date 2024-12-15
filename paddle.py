@@ -1,5 +1,6 @@
 import turtle
 
+
 class Paddle:
     def __init__(self, size, color, thickness=10, x=0, y=0):
         self._width = size[0]

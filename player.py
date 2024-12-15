@@ -1,5 +1,6 @@
 from paddle import Paddle
 
+
 class Player(Paddle):
     def __init__(self, name, id, color, size, pos, border_height):
         super().__init__(size, color)
@@ -19,14 +20,14 @@ class Player(Paddle):
     def __initailize_input_set(self):
         if self._id == 1:
             self.__input_set = {"move_up": "w",
-                              "move_down": "s",
-                              "tilt_cw": "d",
-                              "tilt_ccw": "a"}
+                                "move_down": "s",
+                                "tilt_cw": "d",
+                                "tilt_ccw": "a"}
         elif self._id == 2:
             self.__input_set = {"move_up": "Up",
-                              "move_down": "Down",
-                              "tilt_cw": "Right",
-                              "tilt_ccw": "Left"}
+                                "move_down": "Down",
+                                "tilt_cw": "Right",
+                                "tilt_ccw": "Left"}
 
     def get_input(self, screen):
         screen.listen()
@@ -37,8 +38,7 @@ class Player(Paddle):
 
         screen.onkeyrelease(self.tilt_reset, self.__input_set["tilt_cw"])
         screen.onkeyrelease(self.tilt_reset, self.__input_set["tilt_ccw"])
-        
-    
+
     def move_up(self):
         if self.__target_y < self.__border_height/2:
             self.__target_y += self.__dist_per_move
@@ -56,7 +56,7 @@ class Player(Paddle):
 
     def tilt_ccw(self):
         self._target_angle_deg = self._max_tilt_angle_deg
-    
+
     def tilt_reset(self):
         self._target_angle_deg = 0
 

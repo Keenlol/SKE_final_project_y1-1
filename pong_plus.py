@@ -295,7 +295,7 @@ class PongPlus:
         self.__adjust_hz()
         # initialize pq with collision events and redraw event
         for i in range(len(self._ball_list)):
-            self.__predict(self._ball_list[i])
+            self.__ball_predict(self._ball_list[i])
         heapq.heappush(self._pq, Event(0, None, None, None))
 
         # listen to keyboard events and make player moves

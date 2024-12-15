@@ -3,10 +3,10 @@ from my_event import Event
 from player import Player
 from text import Text
 from button import Button
-import turtle, random, heapq
+import turtle, heapq
 
 class PongPlus:
-    def __init__(self, num_balls, player_names, player_colors, winning_score):
+    def __init__(self, num_balls, player_names, player_colors, winning_score, ball_speed=8):
         self.num_balls = num_balls
         self.ball_list = []
         self.player_list = []
@@ -16,6 +16,7 @@ class PongPlus:
         self.pq = []
         self.HZ = 4
         self.winning_score = winning_score
+        self.ball_speed = ball_speed
         turtle.speed(0)
         turtle.tracer(0)
         turtle.delay(0)
@@ -32,8 +33,7 @@ class PongPlus:
     def __create_objects(self):
         ball_radius = [20, 40]
         for i in range(self.num_balls):
-            ball_color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
-            self.ball_list.append(Ball(ball_radius, ball_color, i, self.canvas_width, self.canvas_height, 8))
+            self.ball_list.append(Ball(ball_radius, i, self.canvas_width, self.canvas_height, self.ball_speed))
 
         player1 = Player(name=self.player_names[0],id=1, color=self.player_colors[0], width=10, height=150, pos=[-420, 0], canvas_info=[self.canvas_width, self.canvas_height])
         player2 = Player(name=self.player_names[1], id=2, color=self.player_colors[1], width=10, height=150, pos=[420, 0], canvas_info=[self.canvas_width, self.canvas_height])
@@ -55,13 +55,13 @@ class PongPlus:
         for i in range(len(self.ball_list)):
             dt = a_ball.time_to_hit(self.ball_list[i])
             # insert this event into pq
-            heapq.heappush(self.pq, Event(self.t + dt, a_ball, self.ball_list[i], None, None))
+            heapq.heappush(self.pq, Event(self.t + dt, a_ball, self.ball_list[i], None))
         
         # particle-wall collisions
         dtX = a_ball.time_to_leave_border()
         dtY = a_ball.time_to_hit_horizontal_wall()
-        heapq.heappush(self.pq, Event(self.t + dtX, a_ball, None, None, None))
-        heapq.heappush(self.pq, Event(self.t + dtY, None, a_ball, None, None))
+        heapq.heappush(self.pq, Event(self.t + dtX, a_ball, None, None))
+        heapq.heappush(self.pq, Event(self.t + dtY, None, a_ball, None))
     
     def __draw_border(self, line_thickness ,color_normal, color_left, color_right, n_interval):
         turtle.penup()
@@ -105,15 +105,15 @@ class PongPlus:
             a_ball.draw()
 
         turtle.update()
-        heapq.heappush(self.pq, Event(self.t + 1.0/self.HZ, None, None, None, None))
+        heapq.heappush(self.pq, Event(self.t + 1.0/self.HZ, None, None, None))
 
     def __paddle_predict(self):
         for a_player in self.player_list:
             for a_ball in self.ball_list:
                 dtPX = a_ball.time_to_hit_paddle_vertical(a_player)
                 dtPY = a_ball.time_to_hit_paddle_horizontal(a_player)
-                heapq.heappush(self.pq, Event(self.t + dtPX, a_ball, None, a_player, [a_player.x, a_player.y]))
-                heapq.heappush(self.pq, Event(self.t + dtPY, a_ball, None, a_player, [a_player.x, a_player.y]))
+                heapq.heappush(self.pq, Event(self.t + dtPX, a_ball, None, a_player))
+                heapq.heappush(self.pq, Event(self.t + dtPY, a_ball, None, a_player))
 
     def __winning_screen(self):
         if self.player_list[0].score > self.player_list[1].score:
@@ -159,7 +159,7 @@ class PongPlus:
         # initialize pq with collision events and redraw event
         for i in range(len(self.ball_list)):
             self.__predict(self.ball_list[i])
-        heapq.heappush(self.pq, Event(0, None, None, None, None))
+        heapq.heappush(self.pq, Event(0, None, None, None))
 
         # listen to keyboard events and activate move_left and move_right handlers accordingly
         for a_player in self.player_list:
@@ -173,7 +173,6 @@ class PongPlus:
             ball_a = current_event.a
             ball_b = current_event.b
             paddle_a = current_event.paddle
-            paddle_a_pos_snapshot = current_event.paddle_pos_snapshot
 
             # update positions, and then simulation clock
             for i in range(len(self.ball_list)):
@@ -200,7 +199,7 @@ class PongPlus:
             elif (ball_a is None) and (ball_b is None) and (paddle_a is None):
                 self.__redraw()
             elif (ball_a is not None) and (ball_b is None) and (paddle_a is not None):
-                ball_a.bounce_off_paddle(paddle_a, paddle_a_pos_snapshot)
+                ball_a.bounce_off_paddle(paddle_a)
 
             self.__predict(ball_a)
             self.__predict(ball_b)

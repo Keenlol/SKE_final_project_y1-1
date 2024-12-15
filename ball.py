@@ -3,10 +3,9 @@ import math
 import random
 
 class Ball:
-    def __init__(self, size_range, color, id, canvas_width, canvas_height, base_speed):
+    def __init__(self, size_range, id, canvas_width, canvas_height, base_speed):
         self.size_range = size_range
         self.base_speed = base_speed
-        self.color = color
         self.count = 0
         self.id = id
         self.canvas_width = canvas_width
@@ -173,10 +172,7 @@ class Ball:
         else:
             return math.inf
 
-    def bounce_off_paddle(self, paddle, paddle_pos_snapshot):
-        # if not (paddle.x == paddle_pos_snapshot[0] and paddle.y == paddle_pos_snapshot[1]):
-        #     return
-
+    def bounce_off_paddle(self, paddle):
         magic_x, magic_y = self.__rotate_xy_around_pivot(self.x, self.y, paddle.x, paddle.y, -paddle.degree)
         magic_vx, magic_vy = self.__rotate_xy_around_pivot(self.vx, self.vy, 0, 0, -paddle.degree)
         dx = abs(magic_x - paddle.x) - self.size - paddle.width/2

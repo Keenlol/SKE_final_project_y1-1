@@ -27,8 +27,11 @@ print()
 color1 = input("Player 1 color: ")
 color2 = input("Player 2 color: ")
 
+print()
+winning_score = int(input("winning score:"))
+
 game = PongPlus(num_balls=2, 
                 player_names=[name1, name2], 
                 player_colors=[color_preset[color1], color_preset[color2]], 
-                winning_score=20)
+                winning_score=winning_score)
 game.play()

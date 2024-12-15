@@ -18,6 +18,7 @@ class PongPlus:
         self.winning_score = winning_score
         turtle.speed(0)
         turtle.tracer(0)
+        turtle.delay(0)
         turtle.hideturtle()
         turtle.colormode(255)
         turtle.setup(width=1920, height=1080, startx=0, starty=0)
@@ -39,11 +40,13 @@ class PongPlus:
         self.player_list = [player1, player2]
 
         ui_score1 = Text(text=str(player1.score) ,pos=[-600,0], char_size=[30,70], color=self.player_colors[0], thickness=20, spacing=30)
-        ui_score2 = Text(text=str(player1.score) ,pos=[600,0], char_size=[30,70], color=self.player_colors[1], thickness=20, spacing=30)
+        ui_score2 = Text(text=str(player2.score) ,pos=[600,0], char_size=[30,70], color=self.player_colors[1], thickness=20, spacing=30)
         self.ui_score_list = [ui_score1, ui_score2]
 
+        ui_name1 = Text(text=player1.name, pos=[-600, -65], char_size=[10, 15], color=self.player_colors[0], thickness=4, spacing=5)
+        ui_name2 = Text(text=player2.name, pos=[600, -65], char_size=[10, 15], color=self.player_colors[1], thickness=4, spacing=5)
+        self.ui_name_list = [ui_name1, ui_name2]
 
-    # updates priority queue with all new events for a_ball
     def __predict(self, a_ball):
         if a_ball is None:
             return
@@ -96,6 +99,8 @@ class PongPlus:
             self.player_list[i].draw()
             self.ui_score_list[i].text = str(self.player_list[i].score)
             self.ui_score_list[i].draw()
+            self.ui_name_list[i].draw()
+
         for a_ball in self.ball_list:
             a_ball.draw()
 
@@ -141,8 +146,16 @@ class PongPlus:
             ui_winning_text.draw()
             turtle.update()
 
-    def play(self):
+    def __adjust_hz(self):
+        total_char = 0
 
+        for a_player in self.player_list:
+            total_char += len(a_player.name)
+        
+        self.HZ = 5 + total_char * (-0.1)
+
+    def play(self):
+        self.__adjust_hz()
         # initialize pq with collision events and redraw event
         for i in range(len(self.ball_list)):
             self.__predict(self.ball_list[i])

@@ -27,17 +27,16 @@ class Ball:
         turtle.circle(self._size)
         turtle.end_fill()
 
-    def bounce_off_vertical_wall(self):
-        self._vx = -self._vx
-        self._count += 1
-        self.__update_color()
+    def move(self, dt):
+        self._x += self._vx*dt
+        self._y += self._vy*dt
 
     def bounce_off_horizontal_wall(self):
         self._vy = -self._vy
         self._count += 1
         self.__update_color()
 
-    def bounce_off(self, that):
+    def bounce_off_ball(self, that):
         dx = that._x - self._x
         dy = that._y - self._y
         dvx = that._vx - self._vx
@@ -64,17 +63,30 @@ class Ball:
         self.__update_color()
         that.__update_color()
 
-    def distance(self, that):
-        x1 = self._x
-        y1 = self._y
-        x2 = that._x
-        y2 = that._y
-        d = math.sqrt((y2-y1)**2 + (x2-x1)**2)
-        return d
+    def bounce_off_paddle(self, paddle):
+        magic_x, magic_y = self.__rotate_xy_around_pivot(
+            self._x, self._y, paddle._x, paddle._y, -paddle._angle_deg)
+        magic_vx, magic_vy = self.__rotate_xy_around_pivot(
+            self._vx, self._vy, 0, 0, -paddle._angle_deg)
 
-    def move(self, dt):
-        self._x += self._vx*dt
-        self._y += self._vy*dt
+        dx = abs(magic_x - paddle._x) - self._size - paddle._width/2
+        dy = abs(magic_y - paddle._y) - self._size - paddle._height/2
+
+        if dx > dy:
+            magic_vx = -magic_vx
+        else:
+            magic_vy = -magic_vy
+
+        # Convert velocity back to world coordinates
+        self._vx, self._vy = self.__rotate_xy_around_pivot(magic_vx, magic_vy, 0, 0, paddle._angle_deg)
+
+        # Add some randomization to make it more interesting
+        current_angle_rad = math.atan2(self._vy, self._vx)
+        self._vx += self._base_speed * math.cos(current_angle_rad) * 0.1
+        self._vy += self._base_speed * math.sin(current_angle_rad) * 0.1
+        self._count += 1
+
+        self.__update_color()
 
     def time_to_hit_ball(self, that):
         if self is that:
@@ -141,8 +153,7 @@ class Ball:
         if (magic_vx < 0) and ((magic_x - self._size) < (paddle._x + paddle._width/2)):
             return math.inf
 
-        dtx = (abs(paddle._x - magic_x) - self._size
-               - paddle._width/2) / abs(magic_vx)
+        dtx = (abs(paddle._x - magic_x) - self._size - paddle._width/2) / abs(magic_vx)
 
         paddle_bottom_edge = paddle._y - paddle._height/2
         paddle_top_edge = paddle._y + paddle._height/2
@@ -165,8 +176,7 @@ class Ball:
 
         if magic_vy == 0:
             return math.inf
-        dty = (abs(paddle._y - magic_y) - self._size -
-               paddle._height/2) / abs(magic_vy)
+        dty = (abs(paddle._y - magic_y) - self._size - paddle._height/2) / abs(magic_vy)
 
         paddle_left_edge = paddle._x - paddle._width/2
         paddle_right_edge = paddle._x + paddle._width/2
@@ -175,31 +185,6 @@ class Ball:
             return dty
         else:
             return math.inf
-
-    def bounce_off_paddle(self, paddle):
-        magic_x, magic_y = self.__rotate_xy_around_pivot(
-            self._x, self._y, paddle._x, paddle._y, -paddle._angle_deg)
-        magic_vx, magic_vy = self.__rotate_xy_around_pivot(
-            self._vx, self._vy, 0, 0, -paddle._angle_deg)
-
-        dx = abs(magic_x - paddle._x) - self._size - paddle._width/2
-        dy = abs(magic_y - paddle._y) - self._size - paddle._height/2
-
-        if dx > dy:
-            magic_vx = -magic_vx
-        else:
-            magic_vy = -magic_vy
-
-        # Convert velocity back to world coordinates
-        self._vx, self._vy = self.__rotate_xy_around_pivot(magic_vx, magic_vy, 0, 0, paddle._angle_deg)
-
-        # Add some randomization to make it more interesting
-        current_angle_rad = math.atan2(self._vy, self._vx)
-        self._vx += self._base_speed * math.cos(current_angle_rad) * 0.1
-        self._vy += self._base_speed * math.sin(current_angle_rad) * 0.1
-        self._count += 1
-
-        self.__update_color()
 
     def respawn(self):
         angle_rad = math.radians(random.randint(0, 360))

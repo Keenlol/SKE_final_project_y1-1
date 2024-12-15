@@ -33,25 +33,26 @@ class PongPlus:
 
     def __create_objects(self):
         for i in range(self._num_balls):
-            self._ball_list.append(Ball(size_range=[20, 40], id=i, border_size=[
-                                   self._border_width, self._border_height], base_speed=self._base_ball_speed))
+            self._ball_list.append(Ball(size_range=[20, 40], id=i, 
+                                        border_size=[self._border_width, self._border_height], 
+                                        base_speed=self._base_ball_speed))
 
-        player1 = Player(name=self._player_names[0], id=1, color=self._player_colors[0], size=[
-                         10, 150], pos=[-420, 0], border_height=self._border_height)
-        player2 = Player(name=self._player_names[1], id=2, color=self._player_colors[1], size=[
-                         10, 150], pos=[420, 0], border_height=self._border_height)
+        player1 = Player(name=self._player_names[0], id=1, color=self._player_colors[0], 
+                        size=[10, 150], pos=[-420, 0], border_height=self._border_height)
+        player2 = Player(name=self._player_names[1], id=2, color=self._player_colors[1], 
+                        size=[10, 150], pos=[420, 0], border_height=self._border_height)
         self._player_list = [player1, player2]
 
-        ui_score1 = Text(text=str(player1._score), pos=[-600, 0], char_size=[
-                         30, 70], color=self._player_colors[0], thickness=20, spacing=30)
-        ui_score2 = Text(text=str(player2._score), pos=[600, 0], char_size=[
-                         30, 70], color=self._player_colors[1], thickness=20, spacing=30)
+        ui_score1 = Text(text=str(player1._score), pos=[-600, 0], char_size=[30, 70], 
+                        color=self._player_colors[0], thickness=20, spacing=30)
+        ui_score2 = Text(text=str(player2._score), pos=[600, 0], char_size=[30, 70], 
+                        color=self._player_colors[1], thickness=20, spacing=30)
         self.ui_score_list = [ui_score1, ui_score2]
 
-        ui_name1 = Text(text=player1._name, pos=[-600, -65], char_size=[
-                        10, 15], color=self._player_colors[0], thickness=4, spacing=5)
-        ui_name2 = Text(text=player2._name, pos=[
-                        600, -65], char_size=[10, 15], color=self._player_colors[1], thickness=4, spacing=5)
+        ui_name1 = Text(text=player1._name, pos=[-600, -65], char_size=[10, 15], 
+                        color=self._player_colors[0], thickness=4, spacing=5)
+        ui_name2 = Text(text=player2._name, pos=[600, -65], char_size=[10, 15], 
+                        color=self._player_colors[1], thickness=4, spacing=5)
         self.ui_name_list = [ui_name1, ui_name2]
 
     def __predict(self, a_ball):
@@ -133,10 +134,13 @@ class PongPlus:
             color = self._player_list[1]._color
             name = self._player_list[1]._name
 
-        ui_winning_text = Text(text=str(
-            name+" WON"), pos=[0, 40], char_size=[40, 90], color=color, thickness=20, spacing=30)
-        ui_retry = Button(text="REMATCH", pos=[0, -70], char_size=[30, 40], idle_color=(
-            100, 100, 100), hover_color=(50, 200, 50), thickness=15, spacing=20)
+        ui_winning_text = Text(text=str(name+" WON"), pos=[0, 40], 
+                               char_size=[40, 90], color=color, 
+                               thickness=20, spacing=30)
+        ui_retry = Button(text="REMATCH", pos=[0, -70], char_size=[30, 40], 
+                          idle_color=(100, 100, 100), hover_color=(50, 200, 50), 
+                          thickness=15, spacing=20)
+
         self.__rematch = False
 
         def on_click(x, y):
@@ -175,7 +179,8 @@ class PongPlus:
             ball_a = current_event._ball_a
             ball_b = current_event._ball_b
             paddle_a = current_event._paddle
-
+            player_1 = self._player_list[0]
+            player_2 = self._player_list[1]
             # update positions, and then simulation clock
             for i in range(len(self._ball_list)):
                 self._ball_list[i].move(current_event._time - self._t)
@@ -187,13 +192,13 @@ class PongPlus:
             self._t = current_event._time
 
             if (ball_a is not None) and (ball_b is not None) and (paddle_a is None):
-                ball_a.bounce_off(ball_b)
+                ball_a.bounce_off_ball(ball_b)
             elif (ball_a is not None) and (ball_b is None) and (paddle_a is None):
                 if ball_a._x < 0:
-                    self._player_list[1]._score += 1
+                    player_2._score += 1
                 elif ball_a._x > 0:
-                    self._player_list[0]._score += 1
-                if self._player_list[0]._score >= self._winning_score or self._player_list[1]._score >= self._winning_score:
+                    player_1._score += 1
+                if player_1._score >= self._winning_score or player_2._score >= self._winning_score:
                     break
                 ball_a.respawn()
             elif (ball_a is None) and (ball_b is not None) and (paddle_a is None):

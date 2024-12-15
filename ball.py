@@ -3,9 +3,9 @@ import math
 import random
 
 class Ball:
-    def __init__(self, size_range, color, id, canvas_width, canvas_height):
+    def __init__(self, size_range, color, id, canvas_width, canvas_height, base_speed):
         self.size_range = size_range
-        self.base_speed = 9
+        self.base_speed = base_speed
         self.color = color
         self.count = 0
         self.id = id
@@ -222,16 +222,14 @@ class Ball:
         dG = color_gradient[1][1] - color_gradient[0][1] 
         dB = color_gradient[1][2] - color_gradient[0][2] 
 
+        if gradient_multiplier > 1:
+            gradient_multiplier = 1
+        elif gradient_multiplier < 0:
+            gradient_multiplier = 0
+
         red = int(color_gradient[0][0] + dR*gradient_multiplier)
         green = int(color_gradient[0][1] + dG*gradient_multiplier)
         blue = int(color_gradient[0][2] + dB*gradient_multiplier)
-
-        if red > 255:
-            red = 255
-        if green > 255:
-            green = 255
-        if blue > 255:
-            blue = 255
 
         self.color = (red, green, blue)
 

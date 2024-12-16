@@ -99,10 +99,10 @@ points:
   - `[6, 3, 1, 5, 8, 5, 3]` for "A"
   - `[]` for " " (space)
 - I also add the "REMATCH" button to replay the game.
-- I use tkinter (which is module that turtle use to display stuff) to pop up prompts for the customization of the game which includes player names, number of balls, and paddle colors that player can pick.
+- I use tkinter (which is module that turtle use to display stuff) to pop up **prompts for the customization** of the game which includes player names, number of balls, and paddle colors that player can pick.
 ---
 
 
 ## Known Issues 🐞
-- Collision Overlap: Paddles may occasionally ignore the ball if they overlap under specific movement scenarios. Increasing the event frequency or refining collision logic could address this issue.
-- Window Flashes: Closing the game might briefly display flashing windows. This is a cosmetic issue with no functional impact.
+- **Collision Overlap:** Paddles may occasionally ignore the ball if they overlap under specific movement scenarios. Increasing the event frequency or refining collision logic could address this issue.
+- **Window Flashes:** Closing the game might briefly display flashing windows. This is a cosmetic issue with no functional impact.

@@ -3,8 +3,7 @@
 A 2-player Pong game with extra features like paddle tilting, multiple balls, dynamic ball colors based on kinetic energy, and customizable player names, paddle colors, and winning scores.
 [Watch the demo here!](https://youtu.be/B3qD5VAks2k)
 
-![Gameplay GIF](‎images/PongPLusDemoGameplay.gif)  
-_Gameplay preview._
+![Gameplay GIF](‎images/PongPLusDemoGameplay.gif)
 
 ---
 

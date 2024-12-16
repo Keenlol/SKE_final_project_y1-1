@@ -1,3 +1,5 @@
+""" A main file to input the values for PongPlus"""
+
 from pong_plus import PongPlus
 
 

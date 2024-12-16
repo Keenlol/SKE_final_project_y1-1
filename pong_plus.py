@@ -25,6 +25,17 @@ class PongPlus:
         # _hz (float): Update frequency
         # _winning_score (int): Score needed to win
         # _base_ball_speed (float): Initial ball speed
+
+    Methods:
+        + play(): Setup and run the game
+        - __create_objects(): Create game objects including balls, players, and UI
+        - __adjust_hz(): Adjust update frequency based on player names length
+        - __ball_predict(ball): Predict future collisions for a ball
+        - __draw_border(): Draw the game border with specified style
+        - __redraw(): Redraw all game objects
+        - __paddle_predict(): Predict collisions between balls and paddles
+        - __winning_screen(): Display and handle the winning screen
+        - __playing_loop(): Main game loop handling object interactions
     """
 
     def __init__(self, num_balls: int,
@@ -65,9 +76,9 @@ class PongPlus:
         self._border_height = turtle.screensize()[1]
         self._rematch = False
 
-        self._create_objects()
+        self.__create_objects()
 
-    def _create_objects(self):
+    def __create_objects(self):
         """Create game objects including balls, players, and UI elements."""
         # initialize balls
         for i in range(self._num_balls):

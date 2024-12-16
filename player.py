@@ -20,6 +20,17 @@ class Player(Paddle):
         - __dist_per_move (float): Distance to move per key press
         - __border_height (float): Height of game border
         - __input_set (Dict): A dict containing cotrols for both players
+
+    Methods:
+        + get_input(Screen): Set up keyboard event listeners for player controls
+        # _move_up(): Move paddle upward if within border limits
+        # _move_down(): Move paddle downward if within border limits
+        # _tilt_cw(): Set target angle for clockwise rotation
+        # _tilt_ccw(): Set target angle for counter-clockwise rotation
+        # _tilt_reset(): Reset target angle to zero
+        + update_angle(): Update paddle angle with smooth rotation
+        + update_position(): Update paddle position with smooth movement
+        - __initailize_input_set(): Initialize keyboard controls based on player ID
     """
 
     def __init__(self, name: str,
@@ -97,15 +108,15 @@ class Player(Paddle):
             screen (Screen): Game screen for input binding
         """
         my_screen.listen()
-        my_screen.onkeypress(self.move_up, self.__input_set["move_up"])
-        my_screen.onkeypress(self.move_down, self.__input_set["move_down"])
-        my_screen.onkeypress(self.tilt_cw, self.__input_set["tilt_cw"])
-        my_screen.onkeypress(self.tilt_ccw, self.__input_set["tilt_ccw"])
+        my_screen.onkeypress(self._move_up, self.__input_set["move_up"])
+        my_screen.onkeypress(self._move_down, self.__input_set["move_down"])
+        my_screen.onkeypress(self._tilt_cw, self.__input_set["tilt_cw"])
+        my_screen.onkeypress(self._tilt_ccw, self.__input_set["tilt_ccw"])
 
-        my_screen.onkeyrelease(self.tilt_reset, self.__input_set["tilt_cw"])
-        my_screen.onkeyrelease(self.tilt_reset, self.__input_set["tilt_ccw"])
+        my_screen.onkeyrelease(self._tilt_reset, self.__input_set["tilt_cw"])
+        my_screen.onkeyrelease(self._tilt_reset, self.__input_set["tilt_ccw"])
 
-    def move_up(self):
+    def _move_up(self):
         """
         Move paddle upward if within border limits.
         Updates target Y position for smooth movement.
@@ -113,13 +124,25 @@ class Player(Paddle):
         if self._target_y < self.__border_height/2:
             self._target_y += self.__dist_per_move
 
-    def move_down(self):
+    def _move_down(self):
         """
         Move paddle downward if within border limits.
         Updates target Y position for smooth movement.
         """
         if self._target_y > -self.__border_height/2:
             self._target_y -= self.__dist_per_move
+
+    def _tilt_cw(self):
+        """Set target angle for clockwise rotation."""
+        self._target_angle_deg = -self._max_tilt_angle_deg
+
+    def _tilt_ccw(self):
+        """Set target angle for counter-clockwise rotation."""
+        self._target_angle_deg = self._max_tilt_angle_deg
+
+    def _tilt_reset(self):
+        """Reset target angle to zero (vertical position)."""
+        self._target_angle_deg = 0
 
     def update_position(self):
         """
@@ -128,18 +151,6 @@ class Player(Paddle):
         """
         dy = self._target_y - self._y
         self.pos = [self._x, self._y + 0.3 * dy]
-
-    def tilt_cw(self):
-        """Set target angle for clockwise rotation."""
-        self._target_angle_deg = -self._max_tilt_angle_deg
-
-    def tilt_ccw(self):
-        """Set target angle for counter-clockwise rotation."""
-        self._target_angle_deg = self._max_tilt_angle_deg
-
-    def tilt_reset(self):
-        """Reset target angle to zero (vertical position)."""
-        self._target_angle_deg = 0
 
     def update_angle(self):
         """

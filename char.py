@@ -23,6 +23,9 @@ class Char:
         # _x (float): X position of character center
         # _y (float): Y position of character center
         # _grid_points (list) <<GET>>: a list containing position of each point of the grid
+
+    Methods:
+        + draw(str): Draw the specified character using turtle graphics.
     """
     def __init__(self, pos: list,
                  size: list,

@@ -20,6 +20,13 @@ class Text:
         # _thickness (int): Line thickness for drawing
         # _color (tuple): RGB color of the text
         # _char_list (list): List of Char objects making up the text
+
+    Methods:
+        + draw(): Main drawing method that updates and draws the complete text string
+        - __update_char_style(): Initialize or update the character list with base style
+        - __update_number_of_char(): Adjust number of Char objects to match text length
+        - __update_char_positions(): Update positions of all characters for proper spacing
+        - __draw_the_text(): Draw each character in the text string
     """
 
     def __init__(self, text: str,

@@ -23,6 +23,20 @@ class Ball:
         # _size_range (list): Range of radius of the ball
         # _color_gradient (list): List of 2 colors of the gradient
                                 ex. [(255, 0, 255), (100, 255, 0)]
+
+    Methods:
+        + draw(): Draw the ball at its current position and color
+        + move(dt): Update ball position based on velocity and time step
+        + bounce_off_horizontal_wall(): Handle collision with top/bottom walls
+        + bounce_off_ball(Ball): Handle collision with another ball
+        + bounce_off_paddle(Paddle): Handle collision with a paddle
+        + respawn(): Reset ball position, size and velocity
+        + update_color(): Update ball color based on kinetic energy
+        + time_to_hit_ball(Ball): Predict time until collision with another ball
+        + time_to_hit_horizontal_wall(): Predict time until wall collision
+        + time_to_hit_paddle_horizontal(Paddle): Predict time until paddle collision
+        + time_to_leave_border(): Predict time until leaving game border
+        - __rotate_xy_around_pivot(list, list, float): Helper for paddle collision calculations
     """
 
     def __init__(self, size_range: list,

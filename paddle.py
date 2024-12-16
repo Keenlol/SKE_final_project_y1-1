@@ -19,6 +19,10 @@ class Paddle:
         # _angle_deg (float) <<GET, SET>>: Rotation angle in degrees
         # _color (tuple) <<GET>>: RGB color of the paddle
         # _thickness (int): Line thickness for drawing
+
+    Methods:
+        + draw(): Draw the paddle
+        - __str__(): String representation
     """
 
     def __init__(self, color: tuple,

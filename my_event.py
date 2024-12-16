@@ -8,12 +8,12 @@ class Event:
     A game event with timing information and involved objects.
 
     Attributes:
-        _time (float): Time when the event occurs
-        _ball_a (Ball): First ball involved in the event (or None)
-        _ball_b (Ball): Second ball involved in the event (or None)
-        _paddle (Paddle): Paddle involved in the event (or None)
-        _count_a (int): Collision count of ball_a at event creation
-        _count_b (int): Collision count of ball_b at event creation
+        # _time (float) <<GET>>: Time when the event occurs
+        # _ball_a (Ball) <<GET>>: First ball involved in the event (or None)
+        # _ball_b (Ball) <<GET>>: Second ball involved in the event (or None)
+        # _paddle (Paddle) <<GET>>: Paddle involved in the event (or None)
+        # _count_a (int): Collision count of ball_a at event creation
+        # _count_b (int): Collision count of ball_b at event creation
     """
 
     def __init__(self, time: float,

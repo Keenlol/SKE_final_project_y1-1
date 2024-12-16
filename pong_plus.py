@@ -15,16 +15,16 @@ class PongPlus:
     Main game class that handles the Pong game logic and rendering.
     
     Attributes:
-        _num_balls (int): Number of balls in play
-        _ball_list (list): List of Ball objects
-        _player_list (list): List of Player objects
-        _player_names (list): List of player names
-        _player_colors (list): List of RGB colors for players
-        _t (float): Current simulation time
-        _pq (list): Priority queue for event handling
-        _HZ (int): Update frequency
-        _winning_score (int): Score needed to win
-        _base_ball_speed (float): Initial ball speed
+        # _num_balls (int): Number of balls in play
+        # _ball_list (list): List of Ball objects
+        # _player_list (list): List of Player objects
+        # _player_names (list): List of player names
+        # _player_colors (list): List of RGB colors for players
+        # _t (float): Current simulation time
+        # _pq (list): Priority queue for event handling
+        # _hz (float): Update frequency
+        # _winning_score (int): Score needed to win
+        # _base_ball_speed (float): Initial ball speed
     """
 
     def __init__(self, num_balls: int,

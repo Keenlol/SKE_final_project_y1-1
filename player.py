@@ -11,14 +11,15 @@ class Player(Paddle):
     movement, scoring, and paddle tilting mechanics.
 
     Attributes:
-        _name (str): Player name
-        _id (int): Player identifier (1 or 2)
-        _score (int): Current player score
-        __border_height (float): Height of game border
-        _max_tilt_angle_deg (float): Maximum tilt angle in degrees
-        _target_angle_deg (float): Target angle for smooth rotation
-        __dist_per_move (float): Distance to move per key press
-        _target_y (float): Target Y position for smooth movement
+        # _name (str) <<GET>>: Player name
+        # _uid (int) <<GET>>: Unique player identifier (1 or 2)
+        # _score (int) <<GET, SET>>: Current player score
+        # _max_tilt_angle_deg (float): Maximum tilt angle in degrees (unsigned)
+        # _target_angle_deg (float): Target angle for smooth rotation (signed)
+        # _target_y (float): Target Y position for smooth movement
+        - __dist_per_move (float): Distance to move per key press
+        - __border_height (float): Height of game border
+        - __input_set (Dict): A dict containing cotrols for both players
     """
 
     def __init__(self, name: str,

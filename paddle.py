@@ -11,13 +11,14 @@ class Paddle:
     and positioning. It serves as the base class for the Player class.
 
     Attributes:
-        _width (float): Width of the paddle
-        _height (float): Height of the paddle
-        _x (float): X position of paddle center
-        _y (float): Y position of paddle center
-        _angle_deg (float): Rotation angle in degrees
-        _color (tuple): RGB color of the paddle
-        _thickness (int): Line thickness for drawing
+        + pos (list) <<GET, SET>>: [x, y] position in the form of list
+        # _width (float) <<GET>>: Width of the paddle
+        # _height (float) <<GET>>: Height of the paddle
+        # _x (float) <<GET, SET>>: X position of paddle center
+        # _y (float) <<GET, SET>>: Y position of paddle center
+        # _angle_deg (float) <<GET, SET>>: Rotation angle in degrees
+        # _color (tuple) <<GET>>: RGB color of the paddle
+        # _thickness (int): Line thickness for drawing
     """
 
     def __init__(self, color: tuple,

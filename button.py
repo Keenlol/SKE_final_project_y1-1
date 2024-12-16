@@ -11,9 +11,9 @@ class Button(Text):
     Inherits from Text class to handle text rendering.
 
     Attributes:
-        _hover_color (tuple): RGB color when mouse hovers over button
-        _idle_color (tuple): RGB color when button is not hovered
-        _extra_size (float): Additional size for hit detection area
+        # _hover_color (tuple): RGB color when mouse hovers over button
+        # _idle_color (tuple): RGB color when button is not hovered
+        # _extra_size (float): Additional size for hit detection area
     """
 
     def __init__(self, text: str,

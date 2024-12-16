@@ -11,15 +11,15 @@ class Text:
     positioning, spacing, and updates of the characters.
 
     Attributes:
-        _text (str): The text string to display (converted to uppercase)
-        _spacing (float): Space between characters
-        _x (float): X position of text center
-        _y (float): Y position of text center
-        _char_width (float): Width of each character
-        _char_height (float): Height of each character
-        _thickness (int): Line thickness for drawing
-        _color (tuple): RGB color of the text
-        _char_list (list): List of Char objects making up the text
+        # _text (str) <<GET, SET>>: The text string to display (converted to uppercase)
+        # _spacing (float): Space between characters
+        # _x (float): X position of text center
+        # _y (float): Y position of text center
+        # _char_width (float): Width of each character
+        # _char_height (float): Height of each character
+        # _thickness (int): Line thickness for drawing
+        # _color (tuple): RGB color of the text
+        # _char_list (list): List of Char objects making up the text
     """
 
     def __init__(self, text: str,

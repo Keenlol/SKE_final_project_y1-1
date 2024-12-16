@@ -15,13 +15,14 @@ class Char:
     6   7   8
 
     Attributes:
-        _color (tuple): RGB color of the character
-        _thickness (int): Line thickness for drawing
-        _width (float): Width of the character
-        _height (float): Height of the character
-        _x (float): X position of character center
-        _y (float): Y position of character center
-        _grid_points (list): a list containing position of each point of the grid
+        + pos (list) <<GET, SET>>: [x, y] position in the form of list
+        # _color (tuple): RGB color of the character
+        # _thickness (int): Line thickness for drawing
+        # _width (float) <<GET, SET>>: Width of the character
+        # _height (float) <<GET, SET>>: Height of the character
+        # _x (float): X position of character center
+        # _y (float): Y position of character center
+        # _grid_points (list) <<GET>>: a list containing position of each point of the grid
     """
     def __init__(self, pos: list,
                  size: list,

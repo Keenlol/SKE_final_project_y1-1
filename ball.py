@@ -11,7 +11,6 @@ class Ball:
 
     Attributes:
         # _uid (int): Unique ID
-        # 
         # _size (float) <<GET>>: Radius of the ball
         # _mass (float) <<GET>>: Mass of the ball
         # _count (int) <<GET>>: Event count
@@ -22,7 +21,8 @@ class Ball:
         # _color (tuple): RGB color
         # _count (int): Collision counter
         # _size_range (list): Range of radius of the ball
-        #
+        # _color_gradient (list): List of 2 colors of the gradient
+                                ex. [(255, 0, 255), (100, 255, 0)]
     """
 
     def __init__(self, size_range: list,

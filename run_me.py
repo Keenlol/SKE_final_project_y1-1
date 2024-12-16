@@ -41,10 +41,12 @@ def get_input():
 
     winning_score = simpledialog.askinteger("Input", "Winning score:")
 
-    return name1, name2, color1, color2, winning_score
+    n_balls = simpledialog.askinteger("Input", "Amount of balls (2 is recommended):")
 
-name1, name2, color1, color2, winning_score = get_input()
-game = PongPlus(num_balls=2,
+    return name1, name2, color1, color2, winning_score, n_balls
+
+name1, name2, color1, color2, winning_score, n_balls = get_input()
+game = PongPlus(num_balls=n_balls,
                 player_names=[name1, name2],
                 player_colors=[color_preset[color1], color_preset[color2]],
                 winning_score=winning_score)

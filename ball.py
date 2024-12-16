@@ -10,13 +10,13 @@ class Ball:
     Represents a ball in the game with physics properties and collision detection.
 
     Attributes:
-        _size (float): Radius of the ball
-        _x (float): X position
-        _y (float): Y position
-        _vx (float): X velocity
-        _vy (float): Y velocity
-        _color (tuple): RGB color
-        _count (int): Collision counter
+        # _size (float): Radius of the ball
+        # _x (float): X position
+        # _y (float): Y position
+        # _vx (float): X velocity
+        # _vy (float): Y velocity
+        # _color (tuple): RGB color
+        # _count (int): Collision counter
     """
 
     def __init__(self, size_range: list,
@@ -37,14 +37,14 @@ class Ball:
         if color_gradient is None:
             color_gradient = [(200, 230, 255), (230, 20, 20)]
 
-        self.__size_range = size_range
+        self._size_range = size_range
         self._base_speed = base_speed
         self._count = 0
         self._uid = uid
-        self.__border_width = border_size[0]
-        self.__border_height = border_size[1]
-        self.__color_gradient = color_gradient
-        self._color = self.__color_gradient[0]
+        self._border_width = border_size[0]
+        self._border_height = border_size[1]
+        self._color_gradient = color_gradient
+        self._color = self._color_gradient[0]
 
         self.respawn()
 
@@ -228,18 +228,18 @@ class Ball:
     def time_to_leave_border(self):
         """ Returns the predicted time the ball will leave the border (left/right)."""
         if self.vx > 0:
-            return (self.__border_width - self.x + self.size) / self.vx
+            return (self._border_width - self.x + self.size) / self.vx
         elif self.vx < 0:
-            return (self.__border_width + self.x + self.size) / (-self.vx)
+            return (self._border_width + self.x + self.size) / (-self.vx)
         else:
             return math.inf
 
     def time_to_hit_horizontal_wall(self):
         """ Returns the predicted time the ball will hit the border (top/bottom)."""
         if self.vy > 0:
-            return (self.__border_height - self.y - self.size) / self.vy
+            return (self._border_height - self.y - self.size) / self.vy
         elif self.vy < 0:
-            return (self.__border_height + self.y - self.size) / (-self.vy)
+            return (self._border_height + self.y - self.size) / (-self.vy)
         else:
             return math.inf
 
@@ -321,7 +321,7 @@ class Ball:
         self._y = 0
         self._vx = self._base_speed * math.cos(angle_rad)
         self._vy = self._base_speed * math.sin(angle_rad)
-        self._size = random.randint(self.__size_range[0], self.__size_range[1])
+        self._size = random.randint(self._size_range[0], self._size_range[1])
         self._mass = math.pi * self.size**2
         self._count += 1
         self.update_color()
@@ -338,18 +338,18 @@ class Ball:
         gradient_multiplier = (current_energy - min_energy) / \
             (max_energy - min_energy)
 
-        dr = self.__color_gradient[1][0] - self.__color_gradient[0][0]
-        dg = self.__color_gradient[1][1] - self.__color_gradient[0][1]
-        db = self.__color_gradient[1][2] - self.__color_gradient[0][2]
+        dr = self._color_gradient[1][0] - self._color_gradient[0][0]
+        dg = self._color_gradient[1][1] - self._color_gradient[0][1]
+        db = self._color_gradient[1][2] - self._color_gradient[0][2]
 
         if gradient_multiplier > 1:
             gradient_multiplier = 1
         elif gradient_multiplier < 0:
             gradient_multiplier = 0
 
-        red = int(self.__color_gradient[0][0] + dr*gradient_multiplier)
-        green = int(self.__color_gradient[0][1] + dg*gradient_multiplier)
-        blue = int(self.__color_gradient[0][2] + db*gradient_multiplier)
+        red = int(self._color_gradient[0][0] + dr*gradient_multiplier)
+        green = int(self._color_gradient[0][1] + dg*gradient_multiplier)
+        blue = int(self._color_gradient[0][2] + db*gradient_multiplier)
 
         self._color = (red, green, blue)
 

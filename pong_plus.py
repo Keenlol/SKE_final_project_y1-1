@@ -1,6 +1,7 @@
 """ Module providing the central class for PongPlus game"""
 
-import heapq, turtle
+import heapq
+import turtle
 
 # from turtle import Turtle, Screen
 from ball import Ball

@@ -17,7 +17,7 @@ class Paddle:
         _y (float): Y position of paddle center
         _angle_deg (float): Rotation angle in degrees
         _color (tuple): RGB color of the paddle
-        __thickness (int): Line thickness for drawing
+        _thickness (int): Line thickness for drawing
     """
 
     def __init__(self, color: tuple,
@@ -40,7 +40,7 @@ class Paddle:
         self._height = size[1]
         self._angle_deg = 0
         self._color = color
-        self.__thickness = thickness
+        self._thickness = thickness
         turtle.penup()
         turtle.setheading(0)
         self.pos = pos
@@ -116,7 +116,7 @@ class Paddle:
         rotation angle. The paddle is filled with its color.
         """
         turtle.color(self._color)
-        turtle.pensize(self.__thickness)
+        turtle.pensize(self._thickness)
         turtle.goto(self._x, self._y)
         turtle.setheading(self._angle_deg)
 

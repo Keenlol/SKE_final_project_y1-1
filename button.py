@@ -36,10 +36,9 @@ class Button(Text):
             hover_color (tuple): RGB color when hovered
         """
         super().__init__(text, pos, char_size, idle_color, thickness, spacing)
-        self.__hover_color = hover_color
-        self.__idle_color = idle_color
-        self.__extra_size = 0
-        self._color = self.__idle_color
+        self._hover_color = hover_color
+        self._idle_color = idle_color
+        self._color = self._idle_color
 
     def __get_cursor_pos(self):
         """
@@ -71,10 +70,10 @@ class Button(Text):
             bool: True if coordinates are within button bounds, False otherwise
         """
         # Calculate button boundaries using first and last characters
-        bottom_right = [self._char_list[0].grid_points[8][0] - self.__extra_size,
-                       self._char_list[0].grid_points[8][1] - self.__extra_size]
-        top_left = [self._char_list[-1].grid_points[0][0] + self.__extra_size,
-                   self._char_list[-1].grid_points[0][1] + self.__extra_size]
+        bottom_right = [self._char_list[0].grid_points[8][0],
+                       self._char_list[0].grid_points[8][1]]
+        top_left = [self._char_list[-1].grid_points[0][0],
+                   self._char_list[-1].grid_points[0][1]]
 
         return bottom_right[0] <= x <= top_left[0] and bottom_right[1] <= y <= top_left[1]
 
@@ -87,8 +86,8 @@ class Button(Text):
 
         # Update color based on hover state
         if self.is_hovered(cursor_x, cursor_y):
-            self._color = self.__hover_color
+            self._color = self._hover_color
         else:
-            self._color = self.__idle_color
+            self._color = self._idle_color
 
         self.draw()

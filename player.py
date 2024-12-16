@@ -18,7 +18,7 @@ class Player(Paddle):
         _max_tilt_angle_deg (float): Maximum tilt angle in degrees
         _target_angle_deg (float): Target angle for smooth rotation
         __dist_per_move (float): Distance to move per key press
-        __target_y (float): Target Y position for smooth movement
+        _target_y (float): Target Y position for smooth movement
     """
 
     def __init__(self, name: str,
@@ -50,7 +50,7 @@ class Player(Paddle):
         self._max_tilt_angle_deg = 40
         self._target_angle_deg = 0
         self.__dist_per_move = self._height*0.8
-        self.__target_y = self._y
+        self._target_y = self._y
 
     @property
     def name(self) -> str:
@@ -109,23 +109,23 @@ class Player(Paddle):
         Move paddle upward if within border limits.
         Updates target Y position for smooth movement.
         """
-        if self.__target_y < self.__border_height/2:
-            self.__target_y += self.__dist_per_move
+        if self._target_y < self.__border_height/2:
+            self._target_y += self.__dist_per_move
 
     def move_down(self):
         """
         Move paddle downward if within border limits.
         Updates target Y position for smooth movement.
         """
-        if self.__target_y > -self.__border_height/2:
-            self.__target_y -= self.__dist_per_move
+        if self._target_y > -self.__border_height/2:
+            self._target_y -= self.__dist_per_move
 
     def update_position(self):
         """
         Update paddle position with smooth movement towards target position.
         Uses interpolation for smooth motion.
         """
-        dy = self.__target_y - self._y
+        dy = self._target_y - self._y
         self.pos = [self._x, self._y + 0.3 * dy]
 
     def tilt_cw(self):

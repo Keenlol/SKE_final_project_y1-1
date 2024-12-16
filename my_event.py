@@ -1,3 +1,5 @@
+""" Module provinding Event class"""
+
 from ball import Ball
 from paddle import Paddle
 
@@ -14,9 +16,9 @@ class Event:
         _count_b (int): Collision count of ball_b at event creation
     """
 
-    def __init__(self, time: float, 
-                 ball_a: Ball, 
-                 ball_b: Ball, 
+    def __init__(self, time: float,
+                 ball_a: Ball,
+                 ball_b: Ball,
                  paddle: Paddle):
         """
         Initialize an event with given parameters.
@@ -34,13 +36,33 @@ class Event:
 
         # Store collision counts at event creation for validity checking
         if ball_a is not None:
-            self._count_a = ball_a._count
+            self._count_a = ball_a.count
         else:
             self._count_a = -1
         if ball_b is not None:
-            self._count_b = ball_b._count
+            self._count_b = ball_b.count
         else:
             self._count_b = -1
+
+    @property
+    def time(self):
+        """Getter for time"""
+        return self._time
+
+    @property
+    def ball_a(self):
+        """Getter for ball_a"""
+        return self._ball_a
+
+    @property
+    def ball_b(self):
+        """Getter for ball_b"""
+        return self.ball_b
+
+    @property
+    def paddle(self):
+        """Getter for paddle"""
+        return self._paddle
 
     def is_valid(self):
         """
@@ -52,9 +74,9 @@ class Event:
         Returns:
             bool: True if event is still valid, False otherwise
         """
-        if (self._ball_a is not None) and (self._ball_a._count != self._count_a):
+        if (self._ball_a is not None) and (self._ball_a.count != self._count_a):
             return False
-        if (self._ball_b is not None) and (self._ball_b._count != self._count_b):
+        if (self._ball_b is not None) and (self._ball_b.count != self._count_b):
             return False
         return True
 

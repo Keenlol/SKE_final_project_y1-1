@@ -1,4 +1,6 @@
-import turtle
+""" Module providing paddle class"""
+
+from turtle import Turtle
 
 
 class Paddle:
@@ -18,10 +20,11 @@ class Paddle:
         __thickness (int): Line thickness for drawing
     """
 
-    def __init__(self, size: list, 
-                 color: tuple, 
-                 thickness: float=10, 
-                 pos: list=[0,0]):
+    def __init__(self, my_turtle: Turtle,
+                 color: tuple,
+                 size: list,
+                 thickness: float=10,
+                 pos: list=None):
         """
         Initialize paddle with given parameters.
 
@@ -31,37 +34,80 @@ class Paddle:
             thickness (int, optional): Line thickness. Defaults to 10.
             pos (list, optional): [x, y] position. Defaults to [0, 0]
         """
+        if pos is None:
+            pos = [0, 0]
+
         self._width = size[0]
         self._height = size[1]
         self.pos = pos
         self._angle_deg = 0
         self._color = color
         self.__thickness = thickness
-        turtle.penup()
-        turtle.setheading(0)
-        turtle.hideturtle()
+        self._my_turtle = my_turtle
+        self._my_turtle.penup()
+        self._my_turtle.setheading(0)
 
     @property
     def pos(self):
-        """
-        Get the current position of the paddle.
-
-        Returns:
-            tuple: (x, y) coordinates of paddle center
-        """
+        """ Position getter, quicker way to get the position"""
         return self._x, self._y
 
     @pos.setter
     def pos(self, pos):
         """
-        Set the position of the paddle.
+        Position setter
 
         Args:
             pos (list): [x, y] new position
         """
         self._x = pos[0]
         self._y = pos[1]
-        turtle.goto(self._x, self._y)
+        self._my_turtle.goto(self._x, self._y)
+
+    @property
+    def x(self):
+        """X position setter"""
+        return self._x
+
+    @x.setter
+    def x(self, x):
+        """X position setter"""
+        self._x = x
+
+    @property
+    def y(self):
+        """Y position getter"""
+        return self._y
+
+    @y.setter
+    def y(self, y):
+        """Y position setter"""
+        self._y = y
+
+    @property
+    def angle_deg(self):
+        """Paddle's angle getter, in degrees."""
+        return self._angle_deg
+
+    @angle_deg.setter
+    def angle_deg(self, angle):
+        """Paddle's angle setter, in degrees."""
+        self._angle_deg = angle
+
+    @property
+    def width(self):
+        """Paddle's width getter."""
+        return self._width
+
+    @property
+    def height(self):
+        """Paddle's height getter."""
+        return self._height
+
+    @property
+    def color(self):
+        """ Getter for color"""
+        return self._color
 
     def draw(self):
         """
@@ -70,28 +116,28 @@ class Paddle:
         Draws a rectangular paddle centered at its position with the current
         rotation angle. The paddle is filled with its color.
         """
-        turtle.color(self._color)
-        turtle.pensize(self.__thickness)
-        turtle.goto(self._x, self._y)
-        turtle.setheading(self._angle_deg)
-        
+        self._my_turtle.color(self._color)
+        self._my_turtle.pensize(self.__thickness)
+        self._my_turtle.goto(self._x, self._y)
+        self._my_turtle.setheading(self._angle_deg)
+
         # Move to starting position
-        turtle.forward(self._width/2)
-        turtle.pendown()
-        turtle.begin_fill()
-        
+        self._my_turtle.forward(self._width/2)
+        self._my_turtle.pendown()
+        self._my_turtle.begin_fill()
+
         # Draw rectangle
-        turtle.left(90)
+        self._my_turtle.left(90)
         for _ in range(2):
-            turtle.forward(self._height/2)
-            turtle.left(90)
-            turtle.forward(self._width)
-            turtle.left(90)
-            turtle.forward(self._height/2)
-        
-        turtle.end_fill()
-        turtle.penup()
-        turtle.goto(self._x, self._y)
+            self._my_turtle.forward(self._height/2)
+            self._my_turtle.left(90)
+            self._my_turtle.forward(self._width)
+            self._my_turtle.left(90)
+            self._my_turtle.forward(self._height/2)
+
+        self._my_turtle.end_fill()
+        self._my_turtle.penup()
+        self._my_turtle.goto(self._x, self._y)
 
     def __str__(self):
         return f"paddle ({self._x:.2f}, {self._y:.2f}) a: {self._angle_deg}*"

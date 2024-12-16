@@ -1,4 +1,7 @@
+""" Module providing Text class for displaying muliple alphanumeric characters"""
+
 import copy
+from turtle import Turtle
 from char import Char
 
 class Text:
@@ -20,7 +23,14 @@ class Text:
         _char_list (list): List of Char objects making up the text
     """
 
-    def __init__(self, text, pos, char_size, color, thickness, spacing) -> None:
+    def __init__(self, text: str,
+                 pos: list,
+                 char_size: float,
+                 color: tuple,
+                 thickness: float,
+                 spacing: float,
+                 my_turtle: Turtle
+                 ) -> None:
         """
         Initialize text object with given parameters.
 
@@ -40,15 +50,24 @@ class Text:
         self._char_height = char_size[1]
         self._thickness = thickness
         self._color = color
+        self._my_turtle = my_turtle
         self.__update_char_style()
+
+    @property
+    def text(self):
+        """ Getter for text"""
+        return self._text
 
     def __update_char_style(self):
         """
         Initialize or update the character list with base character style.
         Creates first character with current style settings.
         """
-        self._char_list = [Char([self._x, self._y], self._char_width, 
-                              self._char_height, self._color, self._thickness)]
+        self._char_list = [Char(pos=[self._x, self._y],
+                                size=[self._char_width, self._char_height],
+                                color=self._color,
+                                thickness=self._thickness,
+                                my_turtle=self._my_turtle)]
 
     def __update_number_of_char(self):
         """
@@ -78,15 +97,15 @@ class Text:
         starting_x = self._x - (((n_char)/2) - 0.5) * center_diff
 
         # Update position of each character
-        for i in range(len(self._char_list)):
-            self._char_list[i].pos = [starting_x + (center_diff * i), self._y]
+        for i, char in enumerate(self._char_list):
+            char.pos = [starting_x + (center_diff * i), self._y]
 
     def __draw_the_text(self):
         """
         Draw each character in the text string using the corresponding Char object.
         """
-        for i in range(len(self._char_list)):
-            self._char_list[i].draw(self._text[i])
+        for i, char in enumerate(self._char_list):
+            char.draw(self._text[i])
 
     def draw(self):
         """

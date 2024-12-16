@@ -1,5 +1,7 @@
+""" Module providing player class"""
+
+from turtle import Turtle, Screen
 from paddle import Paddle
-import turtle
 
 class Player(Paddle):
     """
@@ -20,12 +22,13 @@ class Player(Paddle):
         __target_y (float): Target Y position for smooth movement
     """
 
-    def __init__(self, name: str, 
-                 id: int, 
-                 color: tuple, 
-                 size: float, 
-                 pos: list, 
-                 border_height: float):
+    def __init__(self, name: str,
+                 uid: int,
+                 color: tuple,
+                 size: float,
+                 pos: list,
+                 border_height: float,
+                 my_turtle: Turtle):
         """
         Initialize player with given parameters.
 
@@ -37,9 +40,9 @@ class Player(Paddle):
             pos (list): [x, y] initial position
             border_height (float): Height of game border
         """
-        super().__init__(size, color)
+        super().__init__(my_turtle ,size, color)
         self._name = name
-        self._id = id
+        self._uid = uid
         self._score = 0
         self.__border_height = border_height
         self.__initailize_input_set()
@@ -51,37 +54,57 @@ class Player(Paddle):
         self.__dist_per_move = self._height*0.8
         self.__target_y = self._y
 
+    @property
+    def name(self) -> str:
+        """ Player's name Getter."""
+        return self._name
+
+    @property
+    def uid(self) -> int:
+        """ Player's unique identifier getter"""
+        return self._uid
+
+    @property
+    def score(self) -> int:
+        """ PLayer's score Getter"""
+        return self._score
+
+    @score.setter
+    def score(self, value: int) -> None:
+        """ PLayer's score Setter"""
+        self._score = value
+
     def __initailize_input_set(self):
         """
         Initialize keyboard controls based on player ID.
         Player 1 uses WASD, Player 2 uses arrow keys.
         """
-        if self._id == 1:
+        if self._uid == 1:
             self.__input_set = {"move_up": "w",
                               "move_down": "s",
                               "tilt_cw": "d",
                               "tilt_ccw": "a"}
-        elif self._id == 2:
+        elif self._uid == 2:
             self.__input_set = {"move_up": "Up",
                               "move_down": "Down",
                               "tilt_cw": "Right",
                               "tilt_ccw": "Left"}
 
-    def get_input(self, screen: turtle.Screen):
+    def get_input(self, my_screen: Screen):
         """
         Set up keyboard event listeners for player controls.
 
         Args:
-            screen (turtle.Screen): Game screen for input binding
+            screen (Screen): Game screen for input binding
         """
-        screen.listen()
-        screen.onkeypress(self.move_up, self.__input_set["move_up"])
-        screen.onkeypress(self.move_down, self.__input_set["move_down"])
-        screen.onkeypress(self.tilt_cw, self.__input_set["tilt_cw"])
-        screen.onkeypress(self.tilt_ccw, self.__input_set["tilt_ccw"])
+        my_screen.listen()
+        my_screen.onkeypress(self.move_up, self.__input_set["move_up"])
+        my_screen.onkeypress(self.move_down, self.__input_set["move_down"])
+        my_screen.onkeypress(self.tilt_cw, self.__input_set["tilt_cw"])
+        my_screen.onkeypress(self.tilt_ccw, self.__input_set["tilt_ccw"])
 
-        screen.onkeyrelease(self.tilt_reset, self.__input_set["tilt_cw"])
-        screen.onkeyrelease(self.tilt_reset, self.__input_set["tilt_ccw"])
+        my_screen.onkeyrelease(self.tilt_reset, self.__input_set["tilt_cw"])
+        my_screen.onkeyrelease(self.tilt_reset, self.__input_set["tilt_ccw"])
 
     def move_up(self):
         """

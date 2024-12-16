@@ -1,5 +1,8 @@
+""" Module providing the Button class for handling clickable buttons"""
+
+
+from turtle import Turtle, Screen
 from text import Text
-import turtle
 
 
 class Button(Text):
@@ -13,13 +16,15 @@ class Button(Text):
         _extra_size (float): Additional size for hit detection area
     """
 
-    def __init__(self, text: str, 
-                 pos: list, 
-                 char_size: list, 
-                 idle_color: tuple, 
-                 thickness: int, 
-                 spacing: float, 
-                 hover_color: tuple) -> None:
+    def __init__(self, text: str,
+                 pos: list,
+                 char_size: list,
+                 idle_color: tuple,
+                 thickness: int,
+                 spacing: float,
+                 hover_color: tuple,
+                 my_turtle: Turtle,
+                 my_screen: Screen) -> None:
         """
         Initialize button with given parameters.
 
@@ -32,10 +37,12 @@ class Button(Text):
             spacing (float): Space between characters
             hover_color (tuple): RGB color when hovered
         """
-        super().__init__(text, pos, char_size, idle_color, thickness, spacing)
+        super().__init__(text, pos, char_size, idle_color, thickness, spacing, my_turtle)
         self.__hover_color = hover_color
         self.__idle_color = idle_color
         self.__extra_size = 0
+        self._color = self.__idle_color
+        self.__my_screen = my_screen
 
     def __get_cursor_pos(self):
         """
@@ -44,7 +51,7 @@ class Button(Text):
         Returns:
             tuple: (x, y) coordinates of cursor position
         """
-        screen = turtle.Screen()
+        screen = self.__my_screen
         # Get cursor position relative to window
         cursor_x = screen.getcanvas().winfo_pointerx() - screen.getcanvas().winfo_rootx()
         cursor_y = screen.getcanvas().winfo_pointery() - screen.getcanvas().winfo_rooty()
@@ -67,10 +74,10 @@ class Button(Text):
             bool: True if coordinates are within button bounds, False otherwise
         """
         # Calculate button boundaries using first and last characters
-        bottom_right = [self._char_list[0]._grid_points[8][0] - self.__extra_size,
-                       self._char_list[0]._grid_points[8][1] - self.__extra_size]
-        top_left = [self._char_list[-1]._grid_points[0][0] + self.__extra_size,
-                   self._char_list[-1]._grid_points[0][1] + self.__extra_size]
+        bottom_right = [self._char_list[0].grid_points[8][0] - self.__extra_size,
+                       self._char_list[0].grid_points[8][1] - self.__extra_size]
+        top_left = [self._char_list[-1].grid_points[0][0] + self.__extra_size,
+                   self._char_list[-1].grid_points[0][1] + self.__extra_size]
 
         return bottom_right[0] <= x <= top_left[0] and bottom_right[1] <= y <= top_left[1]
 

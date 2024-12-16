@@ -1,4 +1,6 @@
-import turtle
+""" Module providing a Char class for handling sigular alphanumeric character"""
+
+from turtle import Turtle
 
 
 class Char:
@@ -22,26 +24,26 @@ class Char:
         _y (float): Y position of character center
         _grid_points (list): a list containing position of each point of the grid
     """
-    def __init__(self, pos: list, 
-                 width: float, 
-                 height: float, 
-                 color: tuple, 
-                 thickness: float) -> None:
+    def __init__(self, pos: list,
+                 size: list,
+                 color: tuple,
+                 thickness: float,
+                 my_turtle: Turtle) -> None:
         """
         Initialize a charater with given parameters.
 
         Args:
             pos (list): [x ,y] Position of the character from the middle 
-            width (float): total width of the character
-            height (float): total height of the character
+            size (list): [width, height] Size of the character
             color (tuple): color of the character
             thickness (float): thickness of the line used in drawing the character
         """
         self._color = color
         self._thickness = thickness
-        self._width = width
-        self._height = height
+        self._width = size[0]
+        self._height = size[1]
         self.pos = pos
+        self._my_turtle = my_turtle
         self.__draw_seq = {"0": [6, 0, 2, 8, 6],
                            "1": [3, 1, 7],
                            "2": [3, 0, 2, 5, 6, 8],
@@ -99,17 +101,45 @@ class Char:
         Args:
             pos (list): [x, y] new position
         """
-        self._x = pos[0]
-        self._y = pos[1]
+        x = self._x = pos[0]
+        y = self._y = pos[1]
 
         dx = self._width/2
         dy = self._height/2
 
-        # Calculate 3x3 grid points relative to character center according to the given width and height
-        self._grid_points = [[self._x-dx, self._y+dy], [self._x, self._y+dy], [self._x+dx, self._y+dy],
-                             [self._x-dx, self._y], [self._x,
-                                                     self._y], [self._x+dx, self._y],
-                             [self._x-dx, self._y-dy], [self._x, self._y-dy], [self._x+dx, self._y-dy]]
+        # Calculate 3x3 grid points relative to character center with the given width and height
+        self._grid_points = [[x-dx, y+dy], [x, y+dy], [x+dx, y+dy],
+                             [x-dx, y], [x, y], [x+dx, y],
+                             [x-dx, y-dy], [x, y-dy], [x+dx, y-dy]]
+
+    @property
+    def width(self):
+        """Getter for character's width"""
+        return self._width
+
+    @width.setter
+    def width(self, width):
+        """Setter for character's width"""
+        self._width = width
+
+    @property
+    def height(self):
+        """Getter for character's height"""
+        return self._height
+
+    @height.setter
+    def height(self, height):
+        """Setter for character's height"""
+        self._width = height
+
+    @property
+    def grid_points(self):
+        """ 
+        Getter for grid points
+        
+        Return:
+            list: a list containg 9 positions of all the point of the grid"""
+        return self._grid_points
 
     def draw(self, char: str):
         """
@@ -118,25 +148,25 @@ class Char:
         Args:
             char (str): Single character to draw
         """
-        turtle.penup()
-        turtle.color(self._color)
-        turtle.pensize(self._thickness)
-        turtle.goto(self._x, self._y)
-        turtle.setheading(0)
+        self._my_turtle.penup()
+        self._my_turtle.color(self._color)
+        self._my_turtle.pensize(self._thickness)
+        self._my_turtle.goto(self._x, self._y)
+        self._my_turtle.setheading(0)
 
         sequence = self.__draw_seq[char]
 
         if not sequence == []:
             # Move to first point without drawing
-            turtle.goto(self._grid_points[sequence[0]][0], 
+            self._my_turtle.goto(self._grid_points[sequence[0]][0],
                         self._grid_points[sequence[0]][1])
-            turtle.pendown()
+            self._my_turtle.pendown()
             # Connect remaining points with lines
             for i in range(1, len(sequence)):
-                turtle.goto(
-                    self._grid_points[sequence[i]][0], 
+                self._my_turtle.goto(
+                    self._grid_points[sequence[i]][0],
                     self._grid_points[sequence[i]][1])
-            turtle.penup()
+            self._my_turtle.penup()
 
     def __str__(self) -> str:
         return f"digit pos=({self._x:.2f}, {self._y:.2f})"

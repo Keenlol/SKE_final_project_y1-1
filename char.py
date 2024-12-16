@@ -26,6 +26,7 @@ class Char:
 
     Methods:
         + draw(str): Draw the specified character using turtle graphics.
+        - __str__(): String representation
     """
     def __init__(self, pos: list,
                  size: list,

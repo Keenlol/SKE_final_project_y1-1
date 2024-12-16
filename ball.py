@@ -2,7 +2,7 @@
 
 import math
 import random
-from turtle import Turtle
+import turtle
 from paddle import Paddle
 
 class Ball:
@@ -20,7 +20,6 @@ class Ball:
     """
 
     def __init__(self, size_range: list,
-                 my_turtle: Turtle,
                  uid: int,
                  base_speed: float,
                  border_size: list,
@@ -46,7 +45,6 @@ class Ball:
         self.__border_height = border_size[1]
         self.__color_gradient = color_gradient
         self._color = self.__color_gradient[0]
-        self.__my_turle = my_turtle
 
         self.respawn()
 
@@ -107,16 +105,16 @@ class Ball:
 
     def draw(self):
         """Draw the ball at its position and current color"""
-        self.__my_turle.penup()
-        self.__my_turle.pensize(0)
-        self.__my_turle.color(self._color)
-        self.__my_turle.fillcolor(self._color)
-        self.__my_turle.goto(self.x, self.y-self.size)
-        self.__my_turle.setheading(0)
-        self.__my_turle.pendown()
-        self.__my_turle.begin_fill()
-        self.__my_turle.circle(self.size)
-        self.__my_turle.end_fill()
+        turtle.penup()
+        turtle.pensize(0)
+        turtle.color(self._color)
+        turtle.fillcolor(self._color)
+        turtle.goto(self.x, self.y-self.size)
+        turtle.setheading(0)
+        turtle.pendown()
+        turtle.begin_fill()
+        turtle.circle(self.size)
+        turtle.end_fill()
 
     def move(self, dt: float):
         """Update the ball position based on its velocities."""

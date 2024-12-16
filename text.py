@@ -1,7 +1,6 @@
 """ Module providing Text class for displaying muliple alphanumeric characters"""
 
 import copy
-from turtle import Turtle
 from char import Char
 
 class Text:
@@ -29,7 +28,6 @@ class Text:
                  color: tuple,
                  thickness: float,
                  spacing: float,
-                 my_turtle: Turtle
                  ) -> None:
         """
         Initialize text object with given parameters.
@@ -50,13 +48,17 @@ class Text:
         self._char_height = char_size[1]
         self._thickness = thickness
         self._color = color
-        self._my_turtle = my_turtle
         self.__update_char_style()
 
     @property
     def text(self):
         """ Getter for text"""
         return self._text
+
+    @text.setter
+    def text(self, text):
+        """ Setter for text"""
+        self._text = text
 
     def __update_char_style(self):
         """
@@ -66,8 +68,7 @@ class Text:
         self._char_list = [Char(pos=[self._x, self._y],
                                 size=[self._char_width, self._char_height],
                                 color=self._color,
-                                thickness=self._thickness,
-                                my_turtle=self._my_turtle)]
+                                thickness=self._thickness)]
 
     def __update_number_of_char(self):
         """

@@ -1,7 +1,6 @@
 """ Module providing a Char class for handling sigular alphanumeric character"""
 
-from turtle import Turtle
-
+import turtle
 
 class Char:
     """
@@ -27,8 +26,7 @@ class Char:
     def __init__(self, pos: list,
                  size: list,
                  color: tuple,
-                 thickness: float,
-                 my_turtle: Turtle) -> None:
+                 thickness: float) -> None:
         """
         Initialize a charater with given parameters.
 
@@ -43,7 +41,6 @@ class Char:
         self._width = size[0]
         self._height = size[1]
         self.pos = pos
-        self._my_turtle = my_turtle
         self.__draw_seq = {"0": [6, 0, 2, 8, 6],
                            "1": [3, 1, 7],
                            "2": [3, 0, 2, 5, 6, 8],
@@ -148,25 +145,25 @@ class Char:
         Args:
             char (str): Single character to draw
         """
-        self._my_turtle.penup()
-        self._my_turtle.color(self._color)
-        self._my_turtle.pensize(self._thickness)
-        self._my_turtle.goto(self._x, self._y)
-        self._my_turtle.setheading(0)
+        turtle.penup()
+        turtle.color(self._color)
+        turtle.pensize(self._thickness)
+        turtle.goto(self._x, self._y)
+        turtle.setheading(0)
 
         sequence = self.__draw_seq[char]
 
         if not sequence == []:
             # Move to first point without drawing
-            self._my_turtle.goto(self._grid_points[sequence[0]][0],
+            turtle.goto(self._grid_points[sequence[0]][0],
                         self._grid_points[sequence[0]][1])
-            self._my_turtle.pendown()
+            turtle.pendown()
             # Connect remaining points with lines
             for i in range(1, len(sequence)):
-                self._my_turtle.goto(
+                turtle.goto(
                     self._grid_points[sequence[i]][0],
                     self._grid_points[sequence[i]][1])
-            self._my_turtle.penup()
+            turtle.penup()
 
     def __str__(self) -> str:
         return f"digit pos=({self._x:.2f}, {self._y:.2f})"

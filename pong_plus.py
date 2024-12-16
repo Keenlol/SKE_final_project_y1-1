@@ -40,16 +40,11 @@ class PongPlus:
             ball_speed (float, optional): Initial ball speed. Defaults to 8.
         """
         # Screen setup
-        self._screen = turtle.Screen()
-        self._screen.colormode(255)
-
-        # Create and setup turtle
-        self._game_turtle = turtle.Turtle()
-        self._game_turtle.getscreen().colormode(255)
-        self._game_turtle.speed(0)
-        self._game_turtle.hideturtle()
-        self._screen.tracer(0)
-        self._screen.delay(0)
+        turtle.colormode(255)
+        turtle.speed(0)
+        turtle.hideturtle()
+        turtle.tracer(0)
+        turtle.delay(0)
 
         # Initialize other attributes
         self._num_balls = num_balls
@@ -64,10 +59,10 @@ class PongPlus:
         self._base_ball_speed = ball_speed
 
         # Setup screen dimensions
-        self._screen.setup(width=1920, height=1080, startx=0, starty=0)
-        self._border_width = self._screen.window_width()//2 + 100
-        self._border_height = self._screen.window_height()//2
-
+        turtle.setup(width=1920, height=1080, startx=0, starty=0)
+        self._border_width = turtle.screensize()[0] + 100
+        self._border_height = turtle.screensize()[1]
+        self._screen = turtle.Screen()
         self._rematch = False
 
         self._create_objects()
@@ -80,8 +75,7 @@ class PongPlus:
                 size_range=[20, 40],
                 uid=i,
                 border_size=[self._border_width, self._border_height],
-                base_speed=self._base_ball_speed,
-                my_turtle=self._game_turtle
+                base_speed=self._base_ball_speed
                 ))
 
         # initialize player's paddles
@@ -91,8 +85,7 @@ class PongPlus:
             color=self._player_colors[0],
             size=[10, 150],
             pos=[-420, 0],
-            border_height=self._border_height,
-            my_turtle=self._game_turtle
+            border_height=self._border_height
             )
         player2 = Player(
             uid=2,
@@ -100,8 +93,7 @@ class PongPlus:
             color=self._player_colors[1],
             size=[10, 150],
             pos=[420, 0],
-            border_height=self._border_height,
-            my_turtle=self._game_turtle
+            border_height=self._border_height
             )
         self._player_list = [player1, player2]
 
@@ -112,8 +104,7 @@ class PongPlus:
             char_size=[30, 70],
             color=self._player_colors[0],
             thickness=20,
-            spacing=30,
-            my_turtle=self._game_turtle
+            spacing=30
             )
         ui_score2 = Text(
             text=str(player2.score),
@@ -121,8 +112,7 @@ class PongPlus:
             char_size=[30, 70],
             color=self._player_colors[1],
             thickness=20,
-            spacing=30,
-            my_turtle=self._game_turtle
+            spacing=30
             )
         self.ui_score_list = [ui_score1, ui_score2]
 
@@ -133,8 +123,7 @@ class PongPlus:
             char_size=[10, 15],
             color=self._player_colors[0],
             thickness=4,
-            spacing=5,
-            my_turtle=self._game_turtle
+            spacing=5
             )
         ui_name2 = Text(
             text=player2.name,
@@ -142,8 +131,7 @@ class PongPlus:
             char_size=[10, 15],
             color=self._player_colors[1],
             thickness=4,
-            spacing=5,
-            my_turtle=self._game_turtle
+            spacing=5
             )
         self.ui_name_list = [ui_name1, ui_name2]
 
@@ -185,34 +173,34 @@ class PongPlus:
             color_right (tuple): RGB color for right border
             n_interval (int): Number of dashed line intervals
         """
-        self._game_turtle.penup()
-        self._game_turtle.goto(-self._border_width, -self._border_height)
-        self._game_turtle.pensize(line_thickness)
-        self._game_turtle.setheading(0)
+        turtle.penup()
+        turtle.goto(-self._border_width, -self._border_height)
+        turtle.pensize(line_thickness)
+        turtle.setheading(0)
 
         # write the top/bottom border
         for color_i in [color_right, color_left]:
-            self._game_turtle.pendown()
-            self._game_turtle.color(color_normal)
-            self._game_turtle.forward(2*self._border_width)
-            self._game_turtle.left(90)
-            self._game_turtle.color(color_i)
+            turtle.pendown()
+            turtle.color(color_normal)
+            turtle.forward(2*self._border_width)
+            turtle.left(90)
+            turtle.color(color_i)
 
             # write the left/right border with dashed line
             for i in range(1, n_interval+1):
                 if i % 2 == 1:
-                    self._game_turtle.pendown()
-                    self._game_turtle.forward(2*self._border_height/n_interval)
-                    self._game_turtle.penup()
+                    turtle.pendown()
+                    turtle.forward(2*self._border_height/n_interval)
+                    turtle.penup()
                 else:
-                    self._game_turtle.forward(2*self._border_height/n_interval)
+                    turtle.forward(2*self._border_height/n_interval)
 
-            self._game_turtle.left(90)
-        self._game_turtle.penup()
+            turtle.left(90)
+        turtle.penup()
 
     def __redraw(self):
         """ Redraw everything"""
-        self._screen.clear()
+        turtle.clear()
 
         self.__draw_border(line_thickness=10,
                            color_normal="black",
@@ -221,7 +209,7 @@ class PongPlus:
                            n_interval=15)
 
         # draw players and also their name and score
-        for i in enumerate(self._player_list):
+        for i in range(len(self._player_list)):
             self._player_list[i].draw()
             self.ui_score_list[i].text = str(self._player_list[i].score)
             self.ui_score_list[i].draw()
@@ -231,7 +219,7 @@ class PongPlus:
         for a_ball in self._ball_list:
             a_ball.draw()
 
-        self._screen.update()
+        turtle.update()
         heapq.heappush(self._pq, Event(
             self._t + 1.0/self._hz, None, None, None))
 
@@ -265,8 +253,8 @@ class PongPlus:
                                char_size=[40, 90],
                                color=color,
                                thickness=20,
-                               spacing=30,
-                               my_turtle=self._game_turtle)
+                               spacing=30
+                               )
 
         ui_retry = Button(text="REMATCH",
                           pos=[0, -70],
@@ -274,9 +262,8 @@ class PongPlus:
                           idle_color=(100, 100, 100),
                           hover_color=(50, 200, 50),
                           thickness=15,
-                          spacing=20,
-                          my_turtle=self._game_turtle,
-                          my_screen=self._screen)
+                          spacing=20
+                          )
 
         self._rematch = False
 
@@ -297,14 +284,14 @@ class PongPlus:
                 self.play()
 
         # go to the function above if the mouse is clicked
-        self._screen.onscreenclick(on_click)
+        turtle.onscreenclick(on_click)
 
         # keep drawing the ui if the rematch button hasn't been pressed
         while self._rematch is False:
-            self._game_turtle.clear()
+            turtle.clear()
             ui_retry.active()
             ui_winning_text.draw()
-            self._screen.update()
+            turtle.update()
 
     def __adjust_hz(self):
         """
@@ -376,14 +363,14 @@ class PongPlus:
 
         # listen to keyboard events and make player moves
         for a_player in self._player_list:
-            a_player.get_input(self._screen)
+            a_player.get_input(turtle.Screen())
 
         # different phase of the game
         self.__playing_loop()
         self.__winning_screen()
-        self._screen.bye()
+        turtle.bye()
 
         # hold the window; close it by clicking the window close 'x' mark
-        self._screen.done()
+        turtle.done()
 
 # num_balls = int(input("Number of balls to simulate: "))

@@ -1,7 +1,7 @@
 """ Module providing the Button class for handling clickable buttons"""
 
 
-from turtle import Turtle, Screen
+import turtle
 from text import Text
 
 
@@ -22,9 +22,7 @@ class Button(Text):
                  idle_color: tuple,
                  thickness: int,
                  spacing: float,
-                 hover_color: tuple,
-                 my_turtle: Turtle,
-                 my_screen: Screen) -> None:
+                 hover_color: tuple) -> None:
         """
         Initialize button with given parameters.
 
@@ -37,12 +35,11 @@ class Button(Text):
             spacing (float): Space between characters
             hover_color (tuple): RGB color when hovered
         """
-        super().__init__(text, pos, char_size, idle_color, thickness, spacing, my_turtle)
+        super().__init__(text, pos, char_size, idle_color, thickness, spacing)
         self.__hover_color = hover_color
         self.__idle_color = idle_color
         self.__extra_size = 0
         self._color = self.__idle_color
-        self.__my_screen = my_screen
 
     def __get_cursor_pos(self):
         """
@@ -51,7 +48,7 @@ class Button(Text):
         Returns:
             tuple: (x, y) coordinates of cursor position
         """
-        screen = self.__my_screen
+        screen = turtle.Screen()
         # Get cursor position relative to window
         cursor_x = screen.getcanvas().winfo_pointerx() - screen.getcanvas().winfo_rootx()
         cursor_y = screen.getcanvas().winfo_pointery() - screen.getcanvas().winfo_rooty()

@@ -1,6 +1,5 @@
 """ Module providing player class"""
 
-from turtle import Turtle, Screen
 from paddle import Paddle
 
 class Player(Paddle):
@@ -27,8 +26,7 @@ class Player(Paddle):
                  color: tuple,
                  size: float,
                  pos: list,
-                 border_height: float,
-                 my_turtle: Turtle):
+                 border_height: float):
         """
         Initialize player with given parameters.
 
@@ -40,7 +38,7 @@ class Player(Paddle):
             pos (list): [x, y] initial position
             border_height (float): Height of game border
         """
-        super().__init__(my_turtle ,size, color)
+        super().__init__(color, size)
         self._name = name
         self._uid = uid
         self._score = 0
@@ -90,7 +88,7 @@ class Player(Paddle):
                               "tilt_cw": "Right",
                               "tilt_ccw": "Left"}
 
-    def get_input(self, my_screen: Screen):
+    def get_input(self, my_screen):
         """
         Set up keyboard event listeners for player controls.
 

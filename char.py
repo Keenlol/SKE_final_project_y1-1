@@ -151,6 +151,7 @@ class Char:
         turtle.goto(self._x, self._y)
         turtle.setheading(0)
 
+
         sequence = self.__draw_seq[char]
 
         if not sequence == []:

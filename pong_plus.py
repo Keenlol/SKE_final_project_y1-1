@@ -62,7 +62,6 @@ class PongPlus:
         turtle.setup(width=1920, height=1080, startx=0, starty=0)
         self._border_width = turtle.screensize()[0] + 100
         self._border_height = turtle.screensize()[1]
-        self._screen = turtle.Screen()
         self._rematch = False
 
         self._create_objects()

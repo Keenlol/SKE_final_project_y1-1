@@ -28,7 +28,7 @@ _Gameplay preview._
 ## How to Play 🚀
 
 1. Clone the Repository: `git clone https://github.com/Keenlol/SKE_final_project_y1-1 PongPlus`
-2. Run the `run_me.py` file.
+2. Run `run_me.py` .
 3. Find a friend (optional)
 4. Enter player names, paddle colors, and the winning score when prompted.
 5. Let the game begin!
@@ -76,7 +76,7 @@ _UML diagram of the game._
 ### 95
 - An event-based game involving multiple ball objects colliding with one another and with multiple surfaces, one of which is a control-able and tilt-able paddles that can be oriented at an angle.
 - The paddle has an animation using math instead of pre-coding it frame by frame.
-- The ball linearly changes the color according to its kenetic engergy by following a set of color as a gradient.
+- The ball linearly changes the color according to its kinetic energy by following a set of color as a gradient.
 - A custom fonts drawn purely with turtle in which its height, width and spacing can be easily adjusted if needed to.
 - Includes an ending screen with a button that can restart the game as much as desired.
 - 
@@ -84,10 +84,10 @@ _UML diagram of the game._
 
 ## Project design and implementation 💻
 
--  As for the paddles, form Aj.Paruj's code which only detects and calculate collision from the top and bottom of the paddle. I added collisions detection and calculation from the side of the paddle.
+-  As for the paddles, from **Aj.Paruj**'s code which only detects and calculate collision from the top and bottom of the paddle. I added collisions detection and calculation from the side of the paddle.
 -  As for calculating the collisions for tilting paddles, I rotate everything around the middle of the paddle and pretend like the paddle is up right, so that I can reuse the code for the not-tilted paddles. I created a helper function that rotate an (x, y) position around a certain pivot and that allows me to rotate the ball's position and velocity vectors around the paddle so that I can easily calculate it and rotate it back to apply the correct values.
 -  Paddles animation where made by having a target location and then set the current position x% the distance between the current position and the target position so you have this kinda of nice *easing out* animation.
--  For the ball I added calculation for mass according to its size and also a color gradient code that will change the ball color based on its kenetic energy. The colors is from `rgb(200, 230, 255)` to `rgb(230, 20, 20)` (low to high), so that players can pay attention to the right ball among the chaos of it all. 
+-  The ball's mass is calculated based on its size. Its color dynamically changes according to its kinetic energy, transitioning along a gradient from light blue (`rgb(200, 230, 255)`) at low speeds to bright red (`rgb(230, 20, 20)`) at high speeds. This helps players focus on the most dangerous ball amid the chaos.
 -  I added an extra class for displaying characters using turtle, which is basically a 3x3 grid which each point having its own id:
 ```
 points:
@@ -101,10 +101,10 @@ points:
   - `[]` for " " (space)
   - 
 - I also add the "REMATCH" button to replay the game.
-- I use tkinter (which is module that turtle use to display stuff) to pop up prompts for the customization of the game which includes player names, number of balls and 7 colors that player can pick.
+- I use tkinter (which is module that turtle use to display stuff) to pop up prompts for the customization of the game which includes player names, number of balls, and paddle colors that player can pick.
 ---
 
 
 ## Known Issues 🐞
-- Paddles might ignore the ball when moving into it in a specific way that causes it to overlap with the ball, increasing the event frequency might fix it.
-- Closing the game may cause flashing windows briefly (cosmetic issue).
+- Collision Overlap: Paddles may occasionally ignore the ball if they overlap under specific movement scenarios. Increasing the event frequency or refining collision logic could address this issue.
+- Window Flashes: Closing the game might briefly display flashing windows. This is a cosmetic issue with no functional impact.

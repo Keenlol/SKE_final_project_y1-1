@@ -74,7 +74,6 @@ class PongPlus:
             self._ball_list.append(Ball(
                 size_range=[20, 40],
                 uid=i,
-                border_size=[self._border_width, self._border_height],
                 base_speed=self._base_ball_speed
                 ))
 
@@ -153,8 +152,8 @@ class PongPlus:
                 self._t + dt, a_ball, self._ball_list[i], None))
 
         # particle-wall collisions
-        dt_x = a_ball.time_to_leave_border()
-        dt_y = a_ball.time_to_hit_horizontal_wall()
+        dt_x = a_ball.time_to_leave_border(self._border_width)
+        dt_y = a_ball.time_to_hit_horizontal_wall(self._border_height)
         heapq.heappush(self._pq, Event(self._t + dt_x, a_ball, None, None))
         heapq.heappush(self._pq, Event(self._t + dt_y, None, a_ball, None))
 

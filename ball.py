@@ -10,19 +10,24 @@ class Ball:
     Represents a ball in the game with physics properties and collision detection.
 
     Attributes:
-        # _size (float): Radius of the ball
-        # _x (float): X position
-        # _y (float): Y position
-        # _vx (float): X velocity
-        # _vy (float): Y velocity
+        # _uid (int): Unique ID
+        # 
+        # _size (float) <<GET>>: Radius of the ball
+        # _mass (float) <<GET>>: Mass of the ball
+        # _count (int) <<GET>>: Event count
+        # _x (float) <<GET, SET>>: X position
+        # _y (float) <<GET, SET>>: Y position
+        # _vx (float) <<GET, SET>>: X velocity
+        # _vy (float) <<GET, <SET>>: Y velocity
         # _color (tuple): RGB color
         # _count (int): Collision counter
+        # _size_range (list): Range of radius of the ball
+        #
     """
 
     def __init__(self, size_range: list,
                  uid: int,
                  base_speed: float,
-                 border_size: list,
                  color_gradient: list=None):
         """
         Initialize a ball with given parameters.
@@ -41,8 +46,6 @@ class Ball:
         self._base_speed = base_speed
         self._count = 0
         self._uid = uid
-        self._border_width = border_size[0]
-        self._border_height = border_size[1]
         self._color_gradient = color_gradient
         self._color = self._color_gradient[0]
 
@@ -225,21 +228,21 @@ class Ball:
 
         return t
 
-    def time_to_leave_border(self):
+    def time_to_leave_border(self, border_width):
         """ Returns the predicted time the ball will leave the border (left/right)."""
         if self.vx > 0:
-            return (self._border_width - self.x + self.size) / self.vx
+            return (border_width - self.x + self.size) / self.vx
         elif self.vx < 0:
-            return (self._border_width + self.x + self.size) / (-self.vx)
+            return (border_width + self.x + self.size) / (-self.vx)
         else:
             return math.inf
 
-    def time_to_hit_horizontal_wall(self):
+    def time_to_hit_horizontal_wall(self, border_height):
         """ Returns the predicted time the ball will hit the border (top/bottom)."""
         if self.vy > 0:
-            return (self._border_height - self.y - self.size) / self.vy
+            return (border_height - self.y - self.size) / self.vy
         elif self.vy < 0:
-            return (self._border_height + self.y - self.size) / (-self.vy)
+            return (border_height + self.y - self.size) / (-self.vy)
         else:
             return math.inf
 

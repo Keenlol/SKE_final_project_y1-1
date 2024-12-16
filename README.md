@@ -1,9 +1,10 @@
 # Pong Plus 🎮 
 
 A 2-player Pong game with extra features like paddle tilting, multiple balls, dynamic ball colors based on kinetic energy, and customizable player names, paddle colors, and winning scores.
+[Watch the demo here!](https://youtu.be/B3qD5VAks2k)
 
-![Gameplay GIF](path_to_gif.gif)  
-_Gameplay preview._  
+![Gameplay GIF](‎images/PongPLusDemoGameplay.gif)  
+_Gameplay preview._
 
 ---
 
@@ -11,7 +12,8 @@ _Gameplay preview._
 
 - **2 Player Action**: Classic head-to-head Pong gameplay.  
 - **Paddle Tilting**: Tilt paddles clockwise or counterclockwise for tricky shots.  
-- **Multiple Balls**: Experience the chaos of multiple balls which respawns at the center when leaving the field.  
+- **Multiple Balls**: Experience the chaos of multiple balls which respawns at the center when leaving the field.
+- **Speedy Balls**: Ball speed increase everytime it hits the Paddle.
 - **Customization Options**: before the game starts you'll get to
   - Choose paddle colors for each player.  
   - Set player names to personalize the game.  
@@ -104,5 +106,5 @@ points:
 
 
 ## Known Issues 🐞
-- Paddles might ignore the ball when moving into it in a specific way that causes it to overlap with the ball, increase the event frequency might fix it.
+- Paddles might ignore the ball when moving into it in a specific way that causes it to overlap with the ball, increasing the event frequency might fix it.
 - Closing the game may cause flashing windows briefly (cosmetic issue).

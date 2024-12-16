@@ -20,13 +20,23 @@ class Char:
         _height (float): Height of the character
         _x (float): X position of character center
         _y (float): Y position of character center
-        _grid_points (list): 3x3 grid of points used for character drawing
+        _grid_points (list): a list containing position of each point of the grid
     """
     def __init__(self, pos: list, 
                  width: float, 
                  height: float, 
                  color: tuple, 
                  thickness: float) -> None:
+        """
+        Initialize a charater with given parameters.
+
+        Args:
+            pos (list): [x ,y] Position of the character from the middle 
+            width (float): total width of the character
+            height (float): total height of the character
+            color (tuple): color of the character
+            thickness (float): thickness of the line used in drawing the character
+        """
         self._color = color
         self._thickness = thickness
         self._width = width
@@ -82,7 +92,7 @@ class Char:
         return self._x, self._y
 
     @pos.setter
-    def pos(self, pos):
+    def pos(self, pos: list):
         """
         Set the position of the character and update grid points.
 
@@ -101,7 +111,7 @@ class Char:
                                                      self._y], [self._x+dx, self._y],
                              [self._x-dx, self._y-dy], [self._x, self._y-dy], [self._x+dx, self._y-dy]]
 
-    def draw(self, char):
+    def draw(self, char: str):
         """
         Draw the specified character using turtle graphics.
 

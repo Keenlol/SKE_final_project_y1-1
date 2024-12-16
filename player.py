@@ -1,5 +1,5 @@
 from paddle import Paddle
-
+import turtle
 
 class Player(Paddle):
     """
@@ -67,7 +67,7 @@ class Player(Paddle):
                               "tilt_cw": "Right",
                               "tilt_ccw": "Left"}
 
-    def get_input(self, screen):
+    def get_input(self, screen: turtle.Screen):
         """
         Set up keyboard event listeners for player controls.
 

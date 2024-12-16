@@ -55,7 +55,7 @@ class Button(Text):
 
         return cursor_x, cursor_y
 
-    def is_hovered(self, x, y):
+    def is_hovered(self, x: float, y: float):
         """
         Check if given coordinates are within button's bounds.
 

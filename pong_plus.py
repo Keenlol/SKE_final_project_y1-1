@@ -30,12 +30,10 @@ class PongPlus:
                  winning_score: int, 
                  ball_speed: float=8):
         """
-        Initialize the game with specified parameters.
-
         Args:
             num_balls (int): Number of balls in play
-            player_names (list): List of player names
-            player_colors (list): List of RGB colors for players
+            player_names (list): List of player names, ex. [name1, name2]
+            player_colors (list): List of RGB colors for players, ex. [(0,0,255), (0,255,0)]
             winning_score (int): Score needed to win
             ball_speed (float, optional): Initial ball speed. Defaults to 8.
         """
@@ -90,7 +88,7 @@ class PongPlus:
                         color=self._player_colors[1], thickness=4, spacing=5)
         self.ui_name_list = [ui_name1, ui_name2]
 
-    def __ball_predict(self, a_ball):
+    def __ball_predict(self, a_ball: Ball):
         """
         Predict future collisions for a given ball.
 
@@ -113,12 +111,16 @@ class PongPlus:
         heapq.heappush(self._pq, Event(self._t + dtX, a_ball, None, None))
         heapq.heappush(self._pq, Event(self._t + dtY, None, a_ball, None))
 
-    def __draw_border(self, line_thickness, color_normal, color_left, color_right, n_interval):
+    def __draw_border(self, line_thickness: float, 
+                      color_normal: tuple, 
+                      color_left: tuple, 
+                      color_right: tuple, 
+                      n_interval: int):
         """
-        Draw the game border with specified parameters.
+        Draw the game border.
 
         Args:
-            line_thickness (int): Border line thickness
+            line_thickness (float): Border line thickness
             color_normal (tuple): RGB color for horizontal borders
             color_left (tuple): RGB color for left border
             color_right (tuple): RGB color for right border
@@ -199,20 +201,28 @@ class PongPlus:
             name = self._player_list[1]._name
 
         # initialize the ui(s)
-        ui_winning_text = Text(text=str(name+" WON"), pos=[0, 40], 
-                               char_size=[40, 90], color=color, 
-                               thickness=20, spacing=30)
-        ui_retry = Button(text="REMATCH", pos=[0, -70], char_size=[30, 40], 
-                          idle_color=(100, 100, 100), hover_color=(50, 200, 50), 
-                          thickness=15, spacing=20)
+        ui_winning_text = Text(text=str(name+" WON"), 
+                               pos=[0, 40], 
+                               char_size=[40, 90], 
+                               color=color, 
+                               thickness=20, 
+                               spacing=30)
+
+        ui_retry = Button(text="REMATCH", 
+                          pos=[0, -70], 
+                          char_size=[30, 40], 
+                          idle_color=(100, 100, 100), 
+                          hover_color=(50, 200, 50), 
+                          thickness=15, 
+                          spacing=20)
 
         self.__rematch = False
 
         # reset the values and re-run the game if the "REMATCH" button is pressed
         def on_click(x, y):
             """ 
-            a function for turtle to redirect to when mouse is clicked.
-            if the cursor overlap with the button when clicked then restart the game.
+            a function for turtle to redirect to when the mouse is clicked.
+            if the cursor overlap with the button when clicked then it restarts the game.
             """
             if ui_retry.is_hovered(x, y):
                 self.__rematch = True
@@ -236,8 +246,8 @@ class PongPlus:
 
     def __adjust_hz(self):
         """
-        Adjust the HZ based on the amount of character on the screen
-        to account for the lag it will cause.
+        Adjust the HZ based on the amount of character (mostly from player names) 
+        on the screen to account for the lag it will cause.
         """
         total_char = 0
 

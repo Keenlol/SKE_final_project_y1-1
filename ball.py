@@ -1,7 +1,8 @@
 import turtle
 import math
 import random
-
+from ball import Ball
+from paddle import Paddle
 
 class Ball:
     """
@@ -55,7 +56,7 @@ class Ball:
         turtle.circle(self._size)
         turtle.end_fill()
 
-    def move(self, dt):
+    def move(self, dt: float):
         """Update the ball position based on its velocities."""
         self._x += self._vx*dt
         self._y += self._vy*dt
@@ -66,7 +67,7 @@ class Ball:
         self._count += 1
         self.__update_color()
 
-    def bounce_off_ball(self, that):
+    def bounce_off_ball(self, that: Ball):
         """
         Handle collision physics between two balls.
 
@@ -99,7 +100,7 @@ class Ball:
         self.__update_color()
         that.__update_color()
 
-    def bounce_off_paddle(self, paddle):
+    def bounce_off_paddle(self, paddle: Paddle):
         """
         Handle the collision physics between the ball and a paddle.
 
@@ -130,7 +131,7 @@ class Ball:
 
         self.__update_color()
 
-    def time_to_hit_ball(self, that):
+    def time_to_hit_ball(self, that: Ball):
         """ Returns the predicted time the ball will collide with another ball.
         
         Args:
@@ -181,7 +182,7 @@ class Ball:
         else:
             return math.inf
 
-    def __rotate_xy_around_pivot(self, x, y, pivot_x, pivot_y, angle_add):
+    def __rotate_xy_around_pivot(self, xy: list, pivot: list, angle_add: float):
         """
         Rotate the (x,y) coordinate around a pivot with a given amount of angle
         
@@ -192,6 +193,11 @@ class Ball:
             pivot_y (float): Y coordinate of the pivot
             angle_add (float): Amount of angle to rotate (anti-clockwise, in degrees)
         """
+        x = xy[0]
+        y = xy[1]
+        pivot_x = pivot[0]
+        pivot_y = pivot[1]
+
         angle_add = math.radians(angle_add)
         angle_origin = math.atan2((y - pivot_y), (x - pivot_x))
 
@@ -201,12 +207,12 @@ class Ball:
         final_x = radius * math.cos(angle_origin + angle_add) + pivot_x
         return final_x, final_y
 
-    def time_to_hit_paddle_horizontal(self, paddle):
+    def time_to_hit_paddle_horizontal(self, paddle: Paddle):
         """ Returns the predicted time the ball will hit the left or right side of the paddle"""
         magic_x, magic_y = self.__rotate_xy_around_pivot(
-            self._x, self._y, paddle._x, paddle._y, -paddle._angle_deg)
+            [self._x, self._y], [paddle._x, paddle._y], -paddle._angle_deg)
         magic_vx, magic_vy = self.__rotate_xy_around_pivot(
-            self._vx, self._vy, 0, 0, -paddle._angle_deg)
+            [self._vx, self._vy], [0, 0], -paddle._angle_deg)
 
         if (magic_vx > 0) and ((magic_x + self._size) > (paddle._x - paddle._width/2)):
             return math.inf
@@ -223,12 +229,12 @@ class Ball:
         else:
             return math.inf
 
-    def time_to_hit_paddle_vertical(self, paddle):
+    def time_to_hit_paddle_vertical(self, paddle: Paddle):
         """ Returns the predicted time the ball will hit the top or bottom side of the paddle"""
         magic_x, magic_y = self.__rotate_xy_around_pivot(
-            self._x, self._y, paddle._x, paddle._y, -paddle._angle_deg)
+            [self._x, self._y], [paddle._x, paddle._y], -paddle._angle_deg)
         magic_vx, magic_vy = self.__rotate_xy_around_pivot(
-            self._vx, self._vy, 0, 0, -paddle._angle_deg)
+            [self._vx, self._vy], [0, 0], -paddle._angle_deg)
 
         if (magic_vy > 0) and ((magic_y + self._size) > (paddle._y - paddle._height/2)):
             return math.inf
@@ -261,7 +267,7 @@ class Ball:
 
     def __update_color(self):
         """
-        Change the color of the ball based on its kenetic energy
+        Linearly change the color of the ball based on its kenetic energy
         by using its gradient colors
         """
         current_speed = math.dist([0, 0], [self._vx, self._vy])

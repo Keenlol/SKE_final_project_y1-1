@@ -29,8 +29,7 @@ class Paddle:
             size (list): [width, height] of the paddle
             color (tuple): RGB color for drawing
             thickness (int, optional): Line thickness. Defaults to 10.
-            x (float, optional): Initial x position. Defaults to 0.
-            y (float, optional): Initial y position. Defaults to 0.
+            pos (list, optional): [x, y] position. Defaults to [0, 0]
         """
         self._width = size[0]
         self._height = size[1]

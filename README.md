@@ -4,7 +4,7 @@ A 2-player Pong game with extra features like paddle tilting, multiple balls, dy
 [Watch the demo here!](https://youtu.be/B3qD5VAks2k)
 
 ![Gameplay GIF](‎images/PongPLusDemoGameplay.gif)
-_There suppose to be a gameplay GIF here._
+
 ---
 
 ## Features ✨

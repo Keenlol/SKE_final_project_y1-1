@@ -39,13 +39,14 @@ class Paddle:
 
         self._width = size[0]
         self._height = size[1]
-        self.pos = pos
         self._angle_deg = 0
         self._color = color
         self.__thickness = thickness
         self._my_turtle = my_turtle
         self._my_turtle.penup()
         self._my_turtle.setheading(0)
+        self.pos = pos
+
 
     @property
     def pos(self):

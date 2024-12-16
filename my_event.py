@@ -57,7 +57,7 @@ class Event:
     @property
     def ball_b(self):
         """Getter for ball_b"""
-        return self.ball_b
+        return self._ball_b
 
     @property
     def paddle(self):

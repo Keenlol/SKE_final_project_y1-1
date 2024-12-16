@@ -1,14 +1,13 @@
 """ Module providing the central class for PongPlus game"""
 
-import heapq
+import heapq, turtle
 
-from turtle import Turtle, Screen
+# from turtle import Turtle, Screen
 from ball import Ball
 from my_event import Event
 from player import Player
 from text import Text
 from button import Button
-
 
 class PongPlus:
     """
@@ -40,6 +39,19 @@ class PongPlus:
             winning_score (int): Score needed to win
             ball_speed (float, optional): Initial ball speed. Defaults to 8.
         """
+        # Screen setup
+        self._screen = turtle.Screen()
+        self._screen.colormode(255)
+
+        # Create and setup turtle
+        self._game_turtle = turtle.Turtle()
+        self._game_turtle.getscreen().colormode(255)
+        self._game_turtle.speed(0)
+        self._game_turtle.hideturtle()
+        self._screen.tracer(0)
+        self._screen.delay(0)
+
+        # Initialize other attributes
         self._num_balls = num_balls
         self._ball_list = []
         self._player_list = []
@@ -50,25 +62,17 @@ class PongPlus:
         self._hz = 4
         self._winning_score = winning_score
         self._base_ball_speed = ball_speed
-        # Screen setup
-        self._screen = Screen()
-        self._screen.tracer(0)
-        self._screen.delay(0)
-        self._screen.colormode(255)
+
+        # Setup screen dimensions
         self._screen.setup(width=1920, height=1080, startx=0, starty=0)
-        self._border_width = self._screen.screensize()[0] + 100
-        self._border_height = self._screen.screensize()[1]
-        self._screen = self._screen
-        # Turtle setup
-        self._game_turtle = Turtle()
-        self._game_turtle.speed(0)
-        self._game_turtle.hideturtle()
+        self._border_width = self._screen.window_width()//2 + 100
+        self._border_height = self._screen.window_height()//2
 
-        self.__rematch = False
+        self._rematch = False
 
-        self.__create_objects()
+        self._create_objects()
 
-    def __create_objects(self):
+    def _create_objects(self):
         """Create game objects including balls, players, and UI elements."""
         # initialize balls
         for i in range(self._num_balls):
@@ -154,7 +158,7 @@ class PongPlus:
             return
 
         # particle-particle collisions
-        for i in enumerate(self._ball_list):
+        for i in range(len(self._ball_list)):
             dt = a_ball.time_to_hit_ball(self._ball_list[i])
             # insert this event into pq
             heapq.heappush(self._pq, Event(
@@ -170,8 +174,7 @@ class PongPlus:
                       color_normal: tuple,
                       color_left: tuple,
                       color_right: tuple,
-                      n_interval: int,
-                      my_turtle: Turtle):
+                      n_interval: int):
         """
         Draw the game border.
 
@@ -182,30 +185,30 @@ class PongPlus:
             color_right (tuple): RGB color for right border
             n_interval (int): Number of dashed line intervals
         """
-        my_turtle.penup()
-        my_turtle.goto(-self._border_width, -self._border_height)
-        my_turtle.pensize(line_thickness)
-        my_turtle.setheading(0)
+        self._game_turtle.penup()
+        self._game_turtle.goto(-self._border_width, -self._border_height)
+        self._game_turtle.pensize(line_thickness)
+        self._game_turtle.setheading(0)
 
         # write the top/bottom border
         for color_i in [color_right, color_left]:
-            my_turtle.pendown()
-            my_turtle.color(color_normal)
-            my_turtle.forward(2*self._border_width)
-            my_turtle.left(90)
-            my_turtle.color(color_i)
+            self._game_turtle.pendown()
+            self._game_turtle.color(color_normal)
+            self._game_turtle.forward(2*self._border_width)
+            self._game_turtle.left(90)
+            self._game_turtle.color(color_i)
 
             # write the left/right border with dashed line
             for i in range(1, n_interval+1):
                 if i % 2 == 1:
-                    my_turtle.pendown()
-                    my_turtle.forward(2*self._border_height/n_interval)
-                    my_turtle.penup()
+                    self._game_turtle.pendown()
+                    self._game_turtle.forward(2*self._border_height/n_interval)
+                    self._game_turtle.penup()
                 else:
-                    my_turtle.forward(2*self._border_height/n_interval)
+                    self._game_turtle.forward(2*self._border_height/n_interval)
 
-            my_turtle.left(90)
-        my_turtle.penup()
+            self._game_turtle.left(90)
+        self._game_turtle.penup()
 
     def __redraw(self):
         """ Redraw everything"""
@@ -215,8 +218,7 @@ class PongPlus:
                            color_normal="black",
                            color_left=self._player_colors[0],
                            color_right=self._player_colors[1],
-                           n_interval=15,
-                           my_turtle=self._game_turtle)
+                           n_interval=15)
 
         # draw players and also their name and score
         for i in enumerate(self._player_list):
@@ -276,7 +278,7 @@ class PongPlus:
                           my_turtle=self._game_turtle,
                           my_screen=self._screen)
 
-        self.__rematch = False
+        self._rematch = False
 
         # reset the values and re-run the game if the "REMATCH" button is pressed
         def on_click(x, y):
@@ -285,7 +287,7 @@ class PongPlus:
             if the cursor overlap with the button when clicked then it restarts the game.
             """
             if ui_retry.is_hovered(x, y):
-                self.__rematch = True
+                self._rematch = True
                 self._pq.clear()
                 self._t = 0
                 for a_ball in self._ball_list:
@@ -298,7 +300,7 @@ class PongPlus:
         self._screen.onscreenclick(on_click)
 
         # keep drawing the ui if the rematch button hasn't been pressed
-        while self.__rematch is False:
+        while self._rematch is False:
             self._game_turtle.clear()
             ui_retry.active()
             ui_winning_text.draw()
@@ -331,8 +333,8 @@ class PongPlus:
             player_1 = self._player_list[0]
             player_2 = self._player_list[1]
             # update positions, and then simulation clock
-            for i in enumerate(self._ball_list):
-                self._ball_list[i].move(current_event.time - self._t)
+            for ball in self._ball_list:
+                ball.move(current_event.time - self._t)
 
             for a_player in self._player_list:
                 a_player.update_position()
@@ -368,7 +370,7 @@ class PongPlus:
         """ Play PongPlus, setup and run the game"""
         self.__adjust_hz()
         # initialize pq with collision events and redraw event
-        for i in enumerate(self._ball_list):
+        for i in range(len(self._ball_list)):
             self.__ball_predict(self._ball_list[i])
         heapq.heappush(self._pq, Event(0, None, None, None))
 

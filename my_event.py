@@ -14,6 +14,11 @@ class Event:
         # _paddle (Paddle) <<GET>>: Paddle involved in the event (or None)
         # _count_a (int): Collision count of ball_a at event creation
         # _count_b (int): Collision count of ball_b at event creation
+    
+    Methods:
+        + is_valid(): Check if the event is still valid.
+        - __str__(): String representation
+        - __lt__(self, Event): Compare Events based on time
     """
 
     def __init__(self, time: float,
@@ -28,11 +33,6 @@ class Event:
             ball_a (Ball): First ball involved (or None)
             ball_b (Ball): Second ball involved (or None)
             paddle (Paddle): Paddle involved (or None)
-        
-        Methods:
-            + is_valid(): Check if the event is still valid.
-            - __str__(): String representation
-            - __lt__(self, Event): Compare Events based on time
         """
         self._time = time
         self._ball_a = ball_a

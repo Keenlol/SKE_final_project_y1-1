@@ -1,7 +1,6 @@
 import turtle
 import math
 import random
-from ball import Ball
 from paddle import Paddle
 
 class Ball:
@@ -67,7 +66,7 @@ class Ball:
         self._count += 1
         self.__update_color()
 
-    def bounce_off_ball(self, that: Ball):
+    def bounce_off_ball(self, that):
         """
         Handle collision physics between two balls.
 
@@ -108,9 +107,9 @@ class Ball:
             that (Paddle): The paddle involved in collision
         """
         magic_x, magic_y = self.__rotate_xy_around_pivot(
-            self._x, self._y, paddle._x, paddle._y, -paddle._angle_deg)
+            [self._x, self._y], [paddle._x, paddle._y], -paddle._angle_deg)
         magic_vx, magic_vy = self.__rotate_xy_around_pivot(
-            self._vx, self._vy, 0, 0, -paddle._angle_deg)
+            [self._vx, self._vy], [0, 0], -paddle._angle_deg)
 
         dx = abs(magic_x - paddle._x) - self._size - paddle._width/2
         dy = abs(magic_y - paddle._y) - self._size - paddle._height/2
@@ -121,7 +120,8 @@ class Ball:
             magic_vy = -magic_vy
 
         # Convert velocity back to world coordinates
-        self._vx, self._vy = self.__rotate_xy_around_pivot(magic_vx, magic_vy, 0, 0, paddle._angle_deg)
+        self._vx, self._vy = self.__rotate_xy_around_pivot(
+            [magic_vx, magic_vy], [0, 0], paddle._angle_deg)
 
         # Add some randomization to make it more interesting
         current_angle_rad = math.atan2(self._vy, self._vx)
@@ -131,7 +131,7 @@ class Ball:
 
         self.__update_color()
 
-    def time_to_hit_ball(self, that: Ball):
+    def time_to_hit_ball(self, that):
         """ Returns the predicted time the ball will collide with another ball.
         
         Args:

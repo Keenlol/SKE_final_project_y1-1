@@ -1,8 +1,10 @@
 # Pong Plus 🎮 
 
-##### A 2-player Pong game with extra features like paddle tilting, dynamic ball colors based on kinetic energy, multiple balls, and customizable player names, paddle colors, and winning scores.
+A 2-player Pong game with extra features like paddle tilting, multiple balls, dynamic ball colors based on kinetic energy, and customizable player names, paddle colors, and winning scores.
+
 ![Gameplay GIF](path_to_gif.gif)  
-_Include a short GIF showing the gameplay in action._  
+_Gameplay preview._  
+
 ---
 
 ## Features ✨

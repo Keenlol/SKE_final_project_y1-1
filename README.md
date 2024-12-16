@@ -4,7 +4,7 @@ A 2-player Pong game with extra features like paddle tilting, multiple balls, dy
 [Watch the demo here!](https://youtu.be/B3qD5VAks2k)
 
 ![Gameplay GIF](‎images/PongPLusDemoGameplay.gif)
-
+_There suppose to be a gameplay GIF here._
 ---
 
 ## Features ✨
@@ -84,7 +84,7 @@ _UML diagram of the game._
 ## Project design and implementation 💻
 
 -  As for the paddles, from **Aj.Paruj**'s code which only detects and calculate collision from the top and bottom of the paddle. I added collisions detection and calculation from the side of the paddle.
--  As for calculating the collisions for tilting paddles, I rotate everything around the middle of the paddle and pretend like the paddle is up right, so that I can reuse the code for the not-tilted paddles. I created a helper function that rotate an (x, y) position around a certain pivot and that allows me to rotate the ball's position and velocity vectors around the paddle so that I can easily calculate it and rotate it back to apply the correct values.
+-  As for calculating the collisions for tilting paddles, I **rotate everything around the middle of the paddle** and pretend like the paddle is up right, so that I can reuse the code for the not-tilted paddles. I created a helper function that rotate an (x, y) position around a certain pivot and that allows me to rotate the ball's position and velocity vectors around the paddle so that I can easily calculate it and rotate it back to apply the correct values.
 -  Paddles animation where made by having a target location and then set the current position x% the distance between the current position and the target position so you have this kinda of nice *easing out* animation.
 -  The ball's mass is calculated based on its size. Its color dynamically changes according to its kinetic energy, transitioning along a gradient from light blue (`rgb(200, 230, 255)`) at low speeds to bright red (`rgb(230, 20, 20)`) at high speeds. This helps players focus on the most dangerous ball amid the chaos.
 -  I added an extra class for displaying characters using turtle, which is basically a 3x3 grid which each point having its own id:
@@ -98,7 +98,6 @@ points:
   - `[0, 2, 8, 6]` for "0"
   - `[6, 3, 1, 5, 8, 5, 3]` for "A"
   - `[]` for " " (space)
-  - 
 - I also add the "REMATCH" button to replay the game.
 - I use tkinter (which is module that turtle use to display stuff) to pop up prompts for the customization of the game which includes player names, number of balls, and paddle colors that player can pick.
 ---

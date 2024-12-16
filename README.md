@@ -51,6 +51,24 @@ Ensure you have the following installed:
 
 ---
 
+### Classes and Diagrams
+
+## Class Overview
+- `PongPlus` : The game loops and is the central class of the game.
+- `Ball` : All things ball!, position, mass, size, appearance, collision physics, collision prediction.
+- `Event` : The event of the game. storing necessary data for each event. Use to queue up all the game activity.
+- `Paddle` : The paddle, its angle, position, and appearance.
+  - `Player` : The player, control their paddles, their scores and names.
+- `Char` : Handles the display of a **sigle** alphanumeric character.
+- `Text` : Handles the display of **multiple** alphanumeric character using the `Char` class.
+  - `Button` : Clickable Text that do something.
+
+## UML Diagram
+![UML diagram of the PongPlus game](/images/UML_class_PongPlus.svg)
+_UML diagram of the game._
+
+---
+
 ## Known Issues 🐞
 - Paddles might ignore the ball when moving into it in a specific way.
 - Closing the game may cause flashing windows briefly (cosmetic issue).
